@@ -1,0 +1,328 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/pi/.nvm/versions/node/v4.4.5/bin/node',
+1 verbose cli   '/home/pi/.nvm/versions/node/v4.4.5/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'node-rpi-rgb-led-matrix',
+1 verbose cli   '--save' ]
+2 info using npm@2.15.5
+3 info using node@v4.4.5
+4 verbose install initial load of /home/pi/led-services/package.json
+5 warn package.json led-services@1.0.0 No description
+6 warn package.json led-services@1.0.0 No repository field.
+7 warn package.json led-services@1.0.0 No README data
+8 verbose installManyTop reading scoped package data from /home/pi/led-services/node_modules/amqplib/package.json
+9 verbose installManyTop reading scoped package data from /home/pi/led-services/node_modules/big-red-button/package.json
+10 verbose installManyTop reading scoped package data from /home/pi/led-services/node_modules/firebase/package.json
+11 verbose installManyTop reading scoped package data from /home/pi/led-services/node_modules/nan/package.json
+12 verbose installManyTop reading scoped package data from /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix/package.json
+13 info package.json firebase@3.0.5 No license field.
+14 verbose readDependencies loading dependencies from /home/pi/led-services/package.json
+15 verbose install node-rpi-rgb-led-matrix is installed as 0.1.0
+16 silly cache add args [ 'node-rpi-rgb-led-matrix', null ]
+17 verbose cache add spec node-rpi-rgb-led-matrix
+18 silly cache add parsed spec Result {
+18 silly cache add   raw: 'node-rpi-rgb-led-matrix',
+18 silly cache add   scope: null,
+18 silly cache add   name: 'node-rpi-rgb-led-matrix',
+18 silly cache add   rawSpec: '',
+18 silly cache add   spec: 'latest',
+18 silly cache add   type: 'tag' }
+19 silly addNamed node-rpi-rgb-led-matrix@latest
+20 verbose addNamed "latest" is being treated as a dist-tag for node-rpi-rgb-led-matrix
+21 info addNameTag [ 'node-rpi-rgb-led-matrix', 'latest' ]
+22 silly mapToRegistry name node-rpi-rgb-led-matrix
+23 silly mapToRegistry using default registry
+24 silly mapToRegistry registry https://registry.npmjs.org/
+25 silly mapToRegistry data Result {
+25 silly mapToRegistry   raw: 'node-rpi-rgb-led-matrix',
+25 silly mapToRegistry   scope: null,
+25 silly mapToRegistry   name: 'node-rpi-rgb-led-matrix',
+25 silly mapToRegistry   rawSpec: '',
+25 silly mapToRegistry   spec: 'latest',
+25 silly mapToRegistry   type: 'tag' }
+26 silly mapToRegistry uri https://registry.npmjs.org/node-rpi-rgb-led-matrix
+27 verbose addNameTag registry:https://registry.npmjs.org/node-rpi-rgb-led-matrix not in flight; fetching
+28 verbose request uri https://registry.npmjs.org/node-rpi-rgb-led-matrix
+29 verbose request no auth needed
+30 info attempt registry request try #1 at 1:17:03 AM
+31 verbose request id 6fed1cf127a61a9b
+32 verbose etag "65Y22FXA1VX8ADYPAW21CC5F9"
+33 http request GET https://registry.npmjs.org/node-rpi-rgb-led-matrix
+34 http 304 https://registry.npmjs.org/node-rpi-rgb-led-matrix
+35 verbose headers { date: 'Thu, 23 Jun 2016 01:17:04 GMT',
+35 verbose headers   via: '1.1 varnish',
+35 verbose headers   'cache-control': 'max-age=300',
+35 verbose headers   etag: '"65Y22FXA1VX8ADYPAW21CC5F9"',
+35 verbose headers   age: '0',
+35 verbose headers   connection: 'keep-alive',
+35 verbose headers   'x-served-by': 'cache-ord1736-ORD',
+35 verbose headers   'x-cache': 'MISS',
+35 verbose headers   'x-cache-hits': '0',
+35 verbose headers   'x-timer': 'S1466644624.276182,VS0,VE85',
+35 verbose headers   vary: 'Accept-Encoding' }
+36 silly get cb [ 304,
+36 silly get   { date: 'Thu, 23 Jun 2016 01:17:04 GMT',
+36 silly get     via: '1.1 varnish',
+36 silly get     'cache-control': 'max-age=300',
+36 silly get     etag: '"65Y22FXA1VX8ADYPAW21CC5F9"',
+36 silly get     age: '0',
+36 silly get     connection: 'keep-alive',
+36 silly get     'x-served-by': 'cache-ord1736-ORD',
+36 silly get     'x-cache': 'MISS',
+36 silly get     'x-cache-hits': '0',
+36 silly get     'x-timer': 'S1466644624.276182,VS0,VE85',
+36 silly get     vary: 'Accept-Encoding' } ]
+37 verbose etag https://registry.npmjs.org/node-rpi-rgb-led-matrix from cache
+38 verbose get saving node-rpi-rgb-led-matrix to /home/pi/.npm/registry.npmjs.org/node-rpi-rgb-led-matrix/.cache.json
+39 verbose correctMkdir /home/pi/.npm correctMkdir not in flight; initializing
+40 silly addNameTag next cb for node-rpi-rgb-led-matrix with tag latest
+41 silly addNamed node-rpi-rgb-led-matrix@0.1.0
+42 verbose addNamed "0.1.0" is a plain semver version for node-rpi-rgb-led-matrix
+43 silly cache afterAdd node-rpi-rgb-led-matrix@0.1.0
+44 verbose afterAdd /home/pi/.npm/node-rpi-rgb-led-matrix/0.1.0/package/package.json not in flight; writing
+45 verbose correctMkdir /home/pi/.npm correctMkdir not in flight; initializing
+46 verbose afterAdd /home/pi/.npm/node-rpi-rgb-led-matrix/0.1.0/package/package.json written
+47 silly install resolved [ { name: 'node-rpi-rgb-led-matrix',
+47 silly install resolved     version: '0.1.0',
+47 silly install resolved     description: 'control led matrix with nodejs on raspberry pi. Nodejs binding of https://github.com/hzeller/rpi-rgb-led-matrix',
+47 silly install resolved     keywords:
+47 silly install resolved      [ 'raspberry',
+47 silly install resolved        'raspberrypi',
+47 silly install resolved        'pi',
+47 silly install resolved        'rpi',
+47 silly install resolved        'ledmatrix',
+47 silly install resolved        'rpi-rgb-led-matrix',
+47 silly install resolved        'led-matrix' ],
+47 silly install resolved     homepage: 'https://github.com/zeitungen/node-rpi-rgb-led-matrix/',
+47 silly install resolved     bugs: { url: 'https://github.com/zeitungen/node-rpi-rgb-led-matrix/issues' },
+47 silly install resolved     author:
+47 silly install resolved      { name: 'Maxime Journaux',
+47 silly install resolved        email: 'journaux.maxime@gmail.com',
+47 silly install resolved        url: 'https://github.com/zeitungen/' },
+47 silly install resolved     repository:
+47 silly install resolved      { type: 'git',
+47 silly install resolved        url: 'https://github.com/zeitungen/node-rpi-rgb-led-matrix/' },
+47 silly install resolved     main: 'index.js',
+47 silly install resolved     license: 'WTFPL',
+47 silly install resolved     engines: { node: '>=0.10.3' },
+47 silly install resolved     dependencies: { nan: '^2.2.0' },
+47 silly install resolved     scripts: { install: 'node-gyp rebuild' },
+47 silly install resolved     gypfile: true,
+47 silly install resolved     _id: 'node-rpi-rgb-led-matrix@0.1.0',
+47 silly install resolved     _shasum: '13372a119034ac1531f016aa338a32d7598cd167',
+47 silly install resolved     _from: 'node-rpi-rgb-led-matrix@latest',
+47 silly install resolved     _npmVersion: '1.4.28',
+47 silly install resolved     _npmUser: { name: 'zeitungen', email: 'journaux.maxime@gmail.com' },
+47 silly install resolved     maintainers: [ [Object] ],
+47 silly install resolved     dist:
+47 silly install resolved      { shasum: '13372a119034ac1531f016aa338a32d7598cd167',
+47 silly install resolved        tarball: 'https://registry.npmjs.org/node-rpi-rgb-led-matrix/-/node-rpi-rgb-led-matrix-0.1.0.tgz' },
+47 silly install resolved     _npmOperationalInternal:
+47 silly install resolved      { host: 'packages-5-east.internal.npmjs.com',
+47 silly install resolved        tmp: 'tmp/node-rpi-rgb-led-matrix-0.1.0.tgz_1454873351245_0.9898728628177196' },
+47 silly install resolved     directories: {},
+47 silly install resolved     _resolved: 'https://registry.npmjs.org/node-rpi-rgb-led-matrix/-/node-rpi-rgb-led-matrix-0.1.0.tgz',
+47 silly install resolved     readme: 'ERROR: No README data found!' } ]
+48 info install node-rpi-rgb-led-matrix@0.1.0 into /home/pi/led-services
+49 info installOne node-rpi-rgb-led-matrix@0.1.0
+50 verbose installOne of node-rpi-rgb-led-matrix to /home/pi/led-services not in flight; installing
+51 verbose correctMkdir /home/pi/.npm/_locks correctMkdir not in flight; initializing
+52 verbose lock using /home/pi/.npm/_locks/node-rpi-rgb-led-matrix-bce029f400a16a04.lock for /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+53 silly install write writing node-rpi-rgb-led-matrix 0.1.0 to /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+54 verbose unbuild node_modules/node-rpi-rgb-led-matrix
+55 info preuninstall node-rpi-rgb-led-matrix@0.1.0
+56 info uninstall node-rpi-rgb-led-matrix@0.1.0
+57 verbose unbuild rmStuff node-rpi-rgb-led-matrix@0.1.0 from /home/pi/led-services/node_modules
+58 info postuninstall node-rpi-rgb-led-matrix@0.1.0
+59 silly gentlyRm /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix is being purged from base /home/pi/led-services
+60 verbose gentlyRm don't care about contents; nuking /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+61 silly vacuum-fs purging /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+62 silly vacuum-fs quitting because other entries in /home/pi/led-services/node_modules
+63 verbose tar unpack /home/pi/.npm/node-rpi-rgb-led-matrix/0.1.0/package.tgz
+64 verbose tar unpacking to /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+65 silly gentlyRm /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix is being purged
+66 verbose gentlyRm don't care about contents; nuking /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+67 silly gunzTarPerm modes [ '755', '644' ]
+68 silly gunzTarPerm extractEntry package.json
+69 silly gunzTarPerm extractEntry .npmignore
+70 silly gunzTarPerm extractEntry README.md
+71 silly gunzTarPerm extractEntry LICENSE
+72 silly gunzTarPerm extractEntry index.js
+73 silly gunzTarPerm extractEntry .gitmodules
+74 silly gunzTarPerm extractEntry include/ledmatrix.h
+75 silly gunzTarPerm extractEntry src/base.cc
+76 silly gunzTarPerm extractEntry src/ledmatrix.cc
+77 silly gunzTarPerm extractEntry binding.gyp
+78 silly gunzTarPerm extractEntry external/matrix/.npmignore
+79 silly gunzTarPerm extractEntry external/matrix/README.md
+80 silly gunzTarPerm extractEntry external/matrix/Makefile
+81 silly gunzTarPerm extractEntry external/matrix/text-example.cc
+82 silly gunzTarPerm extractEntry external/matrix/adapter/README.md
+83 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/README.md
+84 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/Makefile
+85 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/active3-rpi-hub75-adapter-cache.lib
+86 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/active3-rpi-hub75-adapter-fab.zip
+87 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/active3-rpi-hub75-adapter.kicad_pcb
+88 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/active3-rpi-hub75-adapter.pro
+89 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/active3-rpi-hub75-adapter.sch
+90 silly gunzTarPerm extractEntry external/matrix/adapter/active-3/schematic.pdf
+91 silly gunzTarPerm extractEntry external/matrix/adapter/kicad-scripts/kicad-fab.py
+92 silly gunzTarPerm extractEntry external/matrix/adapter/kicad-scripts/makefile.inc
+93 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/README.md
+94 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/Makefile
+95 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/passive3-rpi-hub75-adapter-cache.lib
+96 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/passive3-rpi-hub75-adapter-fab.zip
+97 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/passive3-rpi-hub75-adapter.kicad_pcb
+98 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/passive3-rpi-hub75-adapter.pro
+99 silly gunzTarPerm extractEntry external/matrix/adapter/passive-3/passive3-rpi-hub75-adapter.sch
+100 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/README.md
+101 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/Makefile
+102 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/passive-rpi-hub75-adapter-cache.lib
+103 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/passive-rpi-hub75-adapter-fab.zip
+104 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/passive-rpi-hub75-adapter.kicad_pcb
+105 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/passive-rpi-hub75-adapter.pro
+106 silly gunzTarPerm extractEntry external/matrix/adapter/passive-rpi1/passive-rpi-hub75-adapter.sch
+107 silly gunzTarPerm extractEntry external/matrix/demo-main.cc
+108 silly gunzTarPerm extractEntry external/matrix/fonts/README
+109 silly gunzTarPerm extractEntry external/matrix/fonts/7x14.bdf
+110 silly gunzTarPerm extractEntry external/matrix/fonts/5x7.bdf
+111 silly gunzTarPerm extractEntry external/matrix/fonts/5x8.bdf
+112 silly gunzTarPerm extractEntry external/matrix/fonts/6x10.bdf
+113 silly gunzTarPerm extractEntry external/matrix/fonts/6x12.bdf
+114 silly gunzTarPerm extractEntry external/matrix/fonts/6x13.bdf
+115 silly gunzTarPerm extractEntry external/matrix/fonts/6x13B.bdf
+116 silly gunzTarPerm extractEntry external/matrix/fonts/6x13O.bdf
+117 silly gunzTarPerm extractEntry external/matrix/fonts/6x9.bdf
+118 silly gunzTarPerm extractEntry external/matrix/fonts/7x13.bdf
+119 silly gunzTarPerm extractEntry external/matrix/fonts/7x13B.bdf
+120 silly gunzTarPerm extractEntry external/matrix/fonts/7x13O.bdf
+121 silly gunzTarPerm extractEntry external/matrix/fonts/4x6.bdf
+122 silly gunzTarPerm extractEntry external/matrix/fonts/7x14B.bdf
+123 silly gunzTarPerm extractEntry external/matrix/fonts/8x13.bdf
+124 silly gunzTarPerm extractEntry external/matrix/fonts/8x13B.bdf
+125 silly gunzTarPerm extractEntry external/matrix/fonts/8x13O.bdf
+126 silly gunzTarPerm extractEntry external/matrix/fonts/9x15.bdf
+127 silly gunzTarPerm extractEntry external/matrix/fonts/9x15B.bdf
+128 silly gunzTarPerm extractEntry external/matrix/fonts/9x18.bdf
+129 silly gunzTarPerm extractEntry external/matrix/fonts/9x18B.bdf
+130 silly gunzTarPerm extractEntry external/matrix/fonts/AUTHORS
+131 silly gunzTarPerm extractEntry external/matrix/fonts/10x20.bdf
+132 silly gunzTarPerm extractEntry external/matrix/fonts/clR6x12.bdf
+133 silly gunzTarPerm extractEntry external/matrix/fonts/helvR12.bdf
+134 silly gunzTarPerm extractEntry external/matrix/img/passive3-pcb.png
+135 silly gunzTarPerm extractEntry external/matrix/img/Makefile
+136 silly gunzTarPerm extractEntry external/matrix/img/chained-64x64.jpg
+137 silly gunzTarPerm extractEntry external/matrix/img/coordinates.png
+138 silly gunzTarPerm extractEntry external/matrix/img/coordinates.svg
+139 silly gunzTarPerm extractEntry external/matrix/img/hub75-other.jpg
+140 silly gunzTarPerm extractEntry external/matrix/img/hub75.jpg
+141 silly gunzTarPerm extractEntry external/matrix/img/idc-hub75-connector.jpg
+142 silly gunzTarPerm extractEntry external/matrix/img/passive-rpi1-pcb.png
+143 silly gunzTarPerm extractEntry external/matrix/img/active3-pcb.png
+144 silly gunzTarPerm extractEntry external/matrix/img/pixelpusher-vid.jpg
+145 silly gunzTarPerm extractEntry external/matrix/img/powerbar.jpg
+146 silly gunzTarPerm extractEntry external/matrix/img/raspberry-gpio.jpg
+147 silly gunzTarPerm extractEntry external/matrix/img/running-vid.jpg
+148 silly gunzTarPerm extractEntry external/matrix/img/three-parallel-panels-soic.jpg
+149 silly gunzTarPerm extractEntry external/matrix/img/three-parallel-panels.jpg
+150 silly gunzTarPerm extractEntry external/matrix/img/time-display.jpg
+151 silly gunzTarPerm extractEntry external/matrix/img/user-action-shot.jpg
+152 silly gunzTarPerm extractEntry external/matrix/COPYING
+153 silly gunzTarPerm extractEntry external/matrix/led-image-viewer.cc
+154 silly gunzTarPerm extractEntry external/matrix/lib/.npmignore
+155 silly gunzTarPerm extractEntry external/matrix/lib/utf8-internal.h
+156 silly gunzTarPerm extractEntry external/matrix/lib/bdf-font.cc
+157 silly gunzTarPerm extractEntry external/matrix/lib/framebuffer-internal.h
+158 silly gunzTarPerm extractEntry external/matrix/lib/framebuffer.cc
+159 silly gunzTarPerm extractEntry external/matrix/lib/Makefile
+160 silly gunzTarPerm extractEntry external/matrix/lib/graphics.cc
+161 silly gunzTarPerm extractEntry external/matrix/lib/led-matrix.cc
+162 silly gunzTarPerm extractEntry external/matrix/lib/thread.cc
+163 silly gunzTarPerm extractEntry external/matrix/lib/transformer.cc
+164 silly gunzTarPerm extractEntry external/matrix/lib/gpio.cc
+165 silly gunzTarPerm extractEntry external/matrix/minimal-example.cc
+166 silly gunzTarPerm extractEntry external/matrix/python/.npmignore
+167 silly gunzTarPerm extractEntry external/matrix/python/README.md
+168 silly gunzTarPerm extractEntry external/matrix/python/Makefile
+169 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/__init__.py
+170 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/core.cpp
+171 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/core.pxd
+172 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/core.pyx
+173 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/cppinc.pxd
+174 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/graphics.cpp
+175 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/graphics.pxd
+176 silly gunzTarPerm extractEntry external/matrix/python/rgbmatrix/graphics.pyx
+177 silly gunzTarPerm extractEntry external/matrix/python/samples/graphics.py
+178 silly gunzTarPerm extractEntry external/matrix/python/samples/grayscale-block.py
+179 silly gunzTarPerm extractEntry external/matrix/python/samples/pulsing-brightness.py
+180 silly gunzTarPerm extractEntry external/matrix/python/samples/pulsing-colors.py
+181 silly gunzTarPerm extractEntry external/matrix/python/samples/rotating-block-generator.py
+182 silly gunzTarPerm extractEntry external/matrix/python/samples/runtext.py
+183 silly gunzTarPerm extractEntry external/matrix/python/samples/samplebase.py
+184 silly gunzTarPerm extractEntry external/matrix/python/samples/simple-square.py
+185 silly gunzTarPerm extractEntry external/matrix/python/setup.py
+186 silly gunzTarPerm extractEntry external/matrix/runtext.ppm
+187 silly gunzTarPerm extractEntry external/matrix/runtext16.ppm
+188 silly gunzTarPerm extractEntry external/matrix/include/canvas.h
+189 silly gunzTarPerm extractEntry external/matrix/include/gpio.h
+190 silly gunzTarPerm extractEntry external/matrix/include/graphics.h
+191 silly gunzTarPerm extractEntry external/matrix/include/led-matrix.h
+192 silly gunzTarPerm extractEntry external/matrix/include/thread.h
+193 silly gunzTarPerm extractEntry external/matrix/include/threaded-canvas-manipulator.h
+194 silly gunzTarPerm extractEntry external/matrix/include/transformer.h
+195 verbose write writing to /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix/package.json
+196 info preinstall node-rpi-rgb-led-matrix@0.1.0
+197 verbose readDependencies loading dependencies from /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix/package.json
+198 verbose readDependencies loading dependencies from /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix/package.json
+199 silly install resolved []
+200 verbose about to build /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+201 info build /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+202 info linkStuff node-rpi-rgb-led-matrix@0.1.0
+203 silly linkStuff node-rpi-rgb-led-matrix@0.1.0 has /home/pi/led-services/node_modules as its parent node_modules
+204 verbose linkBins node-rpi-rgb-led-matrix@0.1.0
+205 verbose linkMans node-rpi-rgb-led-matrix@0.1.0
+206 verbose rebuildBundles node-rpi-rgb-led-matrix@0.1.0
+207 info install node-rpi-rgb-led-matrix@0.1.0
+208 verbose unsafe-perm in lifecycle true
+209 info node-rpi-rgb-led-matrix@0.1.0 Failed to exec install script
+210 verbose unlock done using /home/pi/.npm/_locks/node-rpi-rgb-led-matrix-bce029f400a16a04.lock for /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+211 verbose stack Error: node-rpi-rgb-led-matrix@0.1.0 install: `node-gyp rebuild`
+211 verbose stack Exit status 1
+211 verbose stack     at EventEmitter.<anonymous> (/home/pi/.nvm/versions/node/v4.4.5/lib/node_modules/npm/lib/utils/lifecycle.js:217:16)
+211 verbose stack     at emitTwo (events.js:87:13)
+211 verbose stack     at EventEmitter.emit (events.js:172:7)
+211 verbose stack     at ChildProcess.<anonymous> (/home/pi/.nvm/versions/node/v4.4.5/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+211 verbose stack     at emitTwo (events.js:87:13)
+211 verbose stack     at ChildProcess.emit (events.js:172:7)
+211 verbose stack     at maybeClose (internal/child_process.js:827:16)
+211 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+212 verbose pkgid node-rpi-rgb-led-matrix@0.1.0
+213 verbose cwd /home/pi/led-services
+214 error Linux 4.1.6+
+215 error argv "/home/pi/.nvm/versions/node/v4.4.5/bin/node" "/home/pi/.nvm/versions/node/v4.4.5/bin/npm" "install" "node-rpi-rgb-led-matrix" "--save"
+216 error node v4.4.5
+217 error npm  v2.15.5
+218 error code ELIFECYCLE
+219 error node-rpi-rgb-led-matrix@0.1.0 install: `node-gyp rebuild`
+219 error Exit status 1
+220 error Failed at the node-rpi-rgb-led-matrix@0.1.0 install script 'node-gyp rebuild'.
+220 error This is most likely a problem with the node-rpi-rgb-led-matrix package,
+220 error not with npm itself.
+220 error Tell the author that this fails on your system:
+220 error     node-gyp rebuild
+220 error You can get information on how to open an issue for this project with:
+220 error     npm bugs node-rpi-rgb-led-matrix
+220 error Or if that isn't available, you can get their info via:
+220 error
+220 error     npm owner ls node-rpi-rgb-led-matrix
+220 error There is likely additional logging output above.
+221 verbose exit [ 1, true ]
+222 verbose unbuild node_modules/node-rpi-rgb-led-matrix
+223 info preuninstall node-rpi-rgb-led-matrix@0.1.0
+224 info uninstall node-rpi-rgb-led-matrix@0.1.0
+225 verbose unbuild rmStuff node-rpi-rgb-led-matrix@0.1.0 from /home/pi/led-services/node_modules
+226 info postuninstall node-rpi-rgb-led-matrix@0.1.0
+227 silly gentlyRm /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix is being purged from base /home/pi/led-services
+228 verbose gentlyRm don't care about contents; nuking /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+229 silly vacuum-fs purging /home/pi/led-services/node_modules/node-rpi-rgb-led-matrix
+230 silly vacuum-fs quitting because other entries in /home/pi/led-services/node_modules
