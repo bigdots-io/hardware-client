@@ -1,10 +1,10 @@
 var assert = require('chai').assert,
     testData = require('./test-data'),
-    KeyFrameProcessor = require('../processors/key-frame-processor'),
+    KeyFrameProcessor = require('../processors/keyframe-processor'),
     MatrixProcessor = require('../processors/matrix-processor');
 
 describe('KeyFrameProcessor', function() {
-  var matrixProcessor = new MatrixProcessor({ 
+  var matrixProcessor = new MatrixProcessor({
     brightness: 100
   });
   var keyFrameProcessor = new KeyFrameProcessor(matrixProcessor);
