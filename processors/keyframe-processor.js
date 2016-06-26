@@ -1,6 +1,6 @@
 "use strict";
 
-class KeyFrameProcessor {
+class KeyframeProcessor {
   constructor(matrixProcessor) {
     this.matrixProcessor = matrixProcessor;
   }
@@ -34,4 +34,4 @@ class KeyFrameProcessor {
   }
 }
 
-module.exports = KeyFrameProcessor;
+module.exports = KeyframeProcessor;
