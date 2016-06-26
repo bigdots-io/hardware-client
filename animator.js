@@ -1,6 +1,6 @@
 "use strict";
 
-class AnimatorProcessor {
+class Animator {
   constructor(keyframes, config) {
     this.keyframes = keyframes;
     this.config = config;
@@ -22,4 +22,4 @@ class AnimatorProcessor {
   }
 }
 
-module.exports = AnimatorProcessor;
+module.exports = Animator;

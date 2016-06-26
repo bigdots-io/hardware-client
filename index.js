@@ -1,5 +1,6 @@
 var firebase = require("firebase");
     LedDisplay = require("./led-display"),
+    Animator = require('./animator'),
     MatrixProcessor = require('./processors/matrix-processor'),
     KeyframeProcessor = require('./processors/keyframe-processor');
 
