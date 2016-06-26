@@ -10,7 +10,7 @@ class Animator {
     var index = 0;
     this.interval = setInterval(() => {
       this.keyframes[index].forEach(function(data) {
-        cb(data.x, data.y, data.r, data.g, data.b)
+        cb(data);
       });
 
       if(index >= this.keyframes.length - 1) {
