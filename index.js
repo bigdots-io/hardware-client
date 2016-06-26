@@ -58,7 +58,7 @@ displayRef.once('value', function(snapshot) {
 			var keyframeData = snapshot.val();
 
       var keyframeProcessor = new KeyframeProcessor(new MatrixProcessor(displayData));
-      var processedKeyframes = keyframeProcessor.process(keyframeData);
+      var processedKeyframes = keyframeProcessor.process(keyframeData.frames);
 
       var animator = new Animator(processedKeyframes, {speed: keyframeData.speed});
 
