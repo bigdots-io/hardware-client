@@ -51,37 +51,70 @@ displayRef.once('value', function(snapshot) {
 
 	var matrixRef = firebase.database().ref('matrices/' + displayData.matrix);
 
-	displayRef.on('child_changed', function(snapshot) {
-		if(snapshot.key === 'brightness') {
-			var brightness = snapshot.val();
+	if(!displayData.keyframe) {
+		displayRef.on('child_changed', function(snapshot) {
+			if(snapshot.key === 'brightness') {
+				var brightness = snapshot.val();
+				var processedData = [];
+			
+				for(var key in matrixData) {
+					processedData.push(processDot(key, matrixData[key].hex, brightness));
+				}
+
+				processedData.forEach(function(data) {
+					matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
+				});
+			}
+		});	
+
+		matrixRef.once('value').then(function(snapshot) {
+			matrixData = snapshot.val();
 			var processedData = [];
-		
+			var data
+
 			for(var key in matrixData) {
-				processedData.push(processDot(key, matrixData[key], brightness));
+				processedData.push(processDot(key, matrixData[key].hex, displayData.brightness));
 			}
 
 			processedData.forEach(function(data) {
 				matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
 			});
-		}
-	});	
 
-	matrixRef.once('value').then(function(snapshot) {
-		matrixData = snapshot.val();
-		var processedData = [];
-		var data
-
-		for(var key in matrixData) {
-			processedData.push(processDot(key, matrixData[key], displayData.brightness));
-		}
-
-		processedData.forEach(function(data) {
-			matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
+			matrixRef.on('child_changed', function(snapshot) {
+				var data = processDot(snapshot.key, snapshot.val().hex, displayData.brightness);
+				matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
+			});
 		});
+	} else {
+		keyframeRef = firebase.database().ref('keyframes/' + displayData.keyframe);
+		keyframeRef.once('value').then(function(snapshot) {
+			keyframeData = snapshot.val();
+			var speed = keyframeData.speed;
 
-		matrixRef.on('child_changed', function(snapshot) {
-			var data = processDot(snapshot.key, snapshot.val(), displayData.brightness);
-			matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
+			console.log(keyframeData)
+			
+			var processedKeyframes = [];
+			
+			for(var frameKey in keyframeData.frames) {
+				var processedKeyframe = [];
+				for(var key in keyframeData.frames[frameKey]) {
+					processedKeyframe.push(processDot(key, keyframeData.frames[frameKey][key].hex, displayData.brightness));
+				}
+				processedKeyframes.push(processedKeyframe);
+			}
+
+			var index = 0;
+			setInterval(function() {
+				processedKeyframes[index].forEach(function(data) {
+					matrix.setPixel(data.x, data.y, data.r, data.g, data.b)
+				});
+
+				if(index >= processedKeyframes.length - 1) {
+					index = 0;
+				} else {
+					index = index + 1;
+				}
+			}, speed)
 		});
-	});
+	}
 });
