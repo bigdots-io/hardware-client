@@ -32,7 +32,7 @@ displayRef.once('value', function(snapshot) {
 			matrixData = snapshot.val();
 
       var matrixProcessor = new MatrixProcessor(displayData);
-
+      console.log('here')
       ledDisplay.update(matrixProcessor.process(matrixData));
 
 			matrixRef.on('child_changed', function(snapshot) {
@@ -57,10 +57,10 @@ displayRef.once('value', function(snapshot) {
 		keyframeRef.once('value').then(function(snapshot) {
 			var keyframeData = snapshot.val();
 
-      new KeyFrameProcessor(new MatrixProcessor(displayData), displayData);
+      var keyFrameProcessor new KeyFrameProcessor(new MatrixProcessor(displayData));
       var processedKeyframes = keyFrameProcessor.process(keyframeData);
 
-      var animator = new Animator(processedKeyframes, { speed: keyframeData.speed});
+      var animator = new Animator(processedKeyframes, {speed: keyframeData.speed});
 
       animator.start(function(data) {
         ledDisplay.updateDot(data);

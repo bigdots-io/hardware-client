@@ -8,8 +8,8 @@ class LedDisplay {
   }
 
   update(dots) {
-    dots.forEach((data) => {
-      this.updateDot(data)
+    dots.forEach((dot) => {
+      this.updateDot(dot)
     });
   }
 
