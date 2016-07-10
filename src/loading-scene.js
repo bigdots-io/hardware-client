@@ -4,19 +4,19 @@ var MatrixProcessor = require('./processors/matrix-processor');
 
 var frames = [
   [
-    {'0:0': hex: '#FFFFFF'},
-    {'0:1': hex: '#000000'},
-    {'0:2': hex: '#000000'}
+    {'0:0': {hex: '#FFFFFF'}},
+    {'0:1': {hex: '#000000'}},
+    {'0:2': {hex: '#000000'}}
   ],
   [
-    {'0:0': hex: '#FFFFFF'},
-    {'0:1': hex: '#FFFFFF'},
-    {'0:2': hex: '#000000'}
+    {'0:0': {hex: '#FFFFFF'}},
+    {'0:1': {hex: '#FFFFFF'}},
+    {'0:2': {hex: '#000000'}}
   ],
   [
-    {'0:0': hex: '#FFFFFF'},
-    {'0:1': hex: '#FFFFFF'},
-    {'0:2': hex: '#FFFFFF'}
+    {'0:0': {hex: '#FFFFFF'}},
+    {'0:1': {hex: '#FFFFFF'}},
+    {'0:2': {hex: '#FFFFFF'}}
   ]
 ]
 
