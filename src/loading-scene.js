@@ -21,16 +21,17 @@ var frames = [
 class LoadingScene {
   constructor() {
     this.interval = null;
-    this.frame = 0;
+    this.frameIndex = 0;
   }
 
   start(callback) {
     this.interval = setInterval(() => {
       callback(frames[this.frame]);
-      if(this.frame == frames.length) {
-        this.frame = 0;
+
+      if(this.frameIndex == frames.length - 1) {
+        this.frameIndex = 0;
       } else {
-        this.frame = this.frame + 1;
+        this.frameIndex = this.frameIndex + 1;
       }
     }, 250);
   }
