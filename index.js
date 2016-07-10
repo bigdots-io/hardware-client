@@ -17,6 +17,8 @@ firebase.initializeApp({
   serviceAccount: "accountService.json"
 });
 
+console.log('Starting up');
+
 var displayID = '-KJYAuwg3nvgTdSaGUU9';
 
 var displayRef = firebase.database().ref(`displays/${displayID}/`);
@@ -33,17 +35,22 @@ displayRef.once('value', function(snapshot) {
 			matrixData = snapshot.val();
 
       var matrixProcessor = new MatrixProcessor(displayData);
-      console.log('here')
+
       ledDisplay.update(matrixProcessor.process(matrixData));
 
 			matrixRef.on('child_changed', function(snapshot) {
+
         var key = snapshot.key,
             hex = snapshot.val().hex;
 
 				ledDisplay.updateDot(matrixProcessor.processDot(key, hex));
+
+        console.log('matrix child_changed: ', key, hex);
 			});
 
       displayRef.on('child_changed', function(snapshot) {
+        console.log('display child_changed: ', snapshot.key);
+
         if(snapshot.key === 'brightness') {
           var brightness = snapshot.val();
 
