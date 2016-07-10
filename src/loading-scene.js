@@ -1,20 +1,22 @@
 "use strict";
 
+var MatrixProcessor = require('./processors/matrix-processor');
+
 var frames = [
   [
-    {y: 0, x: 0, r: 255, g: 255, b: 255},
-    {y: 0, x: 1, r: 0, g: 0, b: 0},
-    {y: 0, x: 2, r: 0, g: 0, b: 0}
+    {y: 0, x: 0, hex: '#FFFFFF'},
+    {y: 0, x: 1, hex: '#000000'},
+    {y: 0, x: 2, hex: '#000000'}
   ],
   [
-    {y: 0, x: 0, r: 255, g: 255, b: 255},
-    {y: 0, x: 1, r: 255, g: 255, b: 255},
-    {y: 0, x: 2, r: 0, g: 0, b: 0}
+    {y: 0, x: 0, hex: '#FFFFFF'},
+    {y: 0, x: 1, hex: '#FFFFFF'},
+    {y: 0, x: 2, hex: '#000000'}
   ],
   [
-    {y: 0, x: 0, r: 255, g: 255, b: 255},
-    {y: 0, x: 1, r: 255, g: 255, b: 255},
-    {y: 0, x: 2, r: 255, g: 255, b: 255}
+    {y: 0, x: 0, hex: '#FFFFFF'},
+    {y: 0, x: 1, hex: '#FFFFFF'},
+    {y: 0, x: 2, hex: '#FFFFFF'}
   ]
 ]
 
@@ -22,11 +24,20 @@ class LoadingScene {
   constructor() {
     this.interval = null;
     this.frameIndex = 0;
+    this.processedFrames = [];
   }
 
   start(callback) {
+    var matrixProcessor = new MatrixProcessor({
+      brightness: 50
+    });
+
+    frames.forEach((frame) => {
+      this.processedFrames.push(matrixProcessor.process(frame));
+    });
+
     this.interval = setInterval(() => {
-      callback(frames[this.frameIndex]);
+      callback(this.processedFrames[this.frameIndex]);
 
       if(this.frameIndex == frames.length - 1) {
         this.frameIndex = 0;
