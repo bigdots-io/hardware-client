@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "Copying upstart config to /etc/init \n\n"
+echo "Copying upstart config to /etc/init"
 cp upstart/sign-painter.conf /etc/init/
 
-echo "Reloading upstart config \n\n"
+echo "Reloading upstart config"
 initctl reload-configuration
 
-echo "Done \n"
+echo "Done"
