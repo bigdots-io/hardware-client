@@ -38,6 +38,8 @@ displayRef.once('value', function(snapshot) {
 
       ledDisplay.update(matrixProcessor.process(matrixData));
 
+      console.log('Initial render');
+
 			matrixRef.on('child_changed', function(snapshot) {
 
         var key = snapshot.key,
