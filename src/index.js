@@ -2,12 +2,18 @@ var firebase = require("firebase");
     LedDisplay = require("./led-display"),
     Animator = require('./animator'),
     MatrixProcessor = require('./processors/matrix-processor'),
-    KeyframeProcessor = require('./processors/keyframe-processor');
+    KeyframeProcessor = require('./processors/keyframe-processor'),
+    LoadingScene = require('./loading-scene');
 
 var ledDisplay = new LedDisplay({
   rows: 16,
   chains: 3,
   parallel: 1
+});
+
+var loadingScene = new LoadingScene();
+loadingScene.start(function(data) {
+  ledDisplay.update(data);
 });
 
 firebase.initializeApp({
@@ -32,9 +38,12 @@ displayRef.once('value', function(snapshot) {
 
 	if(!displayData.keyframe) {
 		matrixRef.once('value').then(function(snapshot) {
+
 			matrixData = snapshot.val();
 
       var matrixProcessor = new MatrixProcessor(displayData);
+
+      loadingScene.stop();
 
       ledDisplay.update(matrixProcessor.process(matrixData));
 
