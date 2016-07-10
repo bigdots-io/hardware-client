@@ -3,7 +3,8 @@
 var LedMatrix = require("node-rpi-rgb-led-matrix");
 
 class LedDisplay {
-  constructor({rows, chains, parallel}) {
+  constructor(config) {
+    var {rows, chains, parallel} = config
     this.display = new LedMatrix(rows, chains, parallel);
   }
 
