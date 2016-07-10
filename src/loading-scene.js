@@ -26,7 +26,7 @@ class LoadingScene {
 
   start(callback) {
     this.interval = setInterval(() => {
-      callback(frames[this.frame]);
+      callback(frames[this.frameIndex]);
 
       if(this.frameIndex == frames.length - 1) {
         this.frameIndex = 0;
