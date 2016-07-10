@@ -4,19 +4,19 @@ var MatrixProcessor = require('./processors/matrix-processor');
 
 var frames = [
   [
-    {y: 0, x: 0, hex: '#FFFFFF'},
-    {y: 0, x: 1, hex: '#000000'},
-    {y: 0, x: 2, hex: '#000000'}
+    {'0:0': hex: '#FFFFFF'},
+    {'0:1': hex: '#000000'},
+    {'0:2': hex: '#000000'}
   ],
   [
-    {y: 0, x: 0, hex: '#FFFFFF'},
-    {y: 0, x: 1, hex: '#FFFFFF'},
-    {y: 0, x: 2, hex: '#000000'}
+    {'0:0': hex: '#FFFFFF'},
+    {'0:1': hex: '#FFFFFF'},
+    {'0:2': hex: '#000000'}
   ],
   [
-    {y: 0, x: 0, hex: '#FFFFFF'},
-    {y: 0, x: 1, hex: '#FFFFFF'},
-    {y: 0, x: 2, hex: '#FFFFFF'}
+    {'0:0': hex: '#FFFFFF'},
+    {'0:1': hex: '#FFFFFF'},
+    {'0:2': hex: '#FFFFFF'}
   ]
 ]
 
@@ -29,7 +29,7 @@ class LoadingScene {
 
   start(callback) {
     var matrixProcessor = new MatrixProcessor({
-      brightness: 50
+      brightness: 10
     });
 
     frames.forEach((frame) => {
