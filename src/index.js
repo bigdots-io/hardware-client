@@ -83,4 +83,4 @@ hardwareRef.once('value', function(snapshot) {
   //     }
   //   });
 	// });
-});
+// });
