@@ -39,7 +39,6 @@ hardwareRef.once('value', function(snapshot) {
     loadingScene.stop();
     display.load({
       onPixelChange: function(y, x, hex) {
-        console.log(y, x, hex)
         ledDisplay.updateDot(matrixProcessor.processDot(`${y}:${x}`, hex));
       }
     });
