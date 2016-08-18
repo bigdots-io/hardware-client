@@ -19,8 +19,7 @@ loadingScene.start(function(data) {
 firebase.initializeApp({
   apiKey: "AIzaSyANob4DbCBvpUU1PJjq6p77qpTwsMrcJfI",
   authDomain: "led-fiesta.firebaseapp.com",
-  databaseURL: "https://led-fiesta.firebaseio.com",
-  serviceAccount: "accountService.json"
+  databaseURL: "https://led-fiesta.firebaseio.com"
 });
 
 console.log('Starting up');
@@ -36,54 +35,38 @@ displayRef.once('value', function(snapshot) {
 
 	var matrixRef = firebase.database().ref(`matrices/${displayData.matrix}`);
 
-	if(!displayData.keyframe) {
-		matrixRef.once('value').then(function(snapshot) {
+	matrixRef.once('value').then(function(snapshot) {
 
-			matrixData = snapshot.val();
+		matrixData = snapshot.val();
 
-      var matrixProcessor = new MatrixProcessor(displayData);
+    var matrixProcessor = new MatrixProcessor(displayData);
 
-      loadingScene.stop();
+    loadingScene.stop();
 
-      ledDisplay.update(matrixProcessor.process(matrixData));
+    ledDisplay.update(matrixProcessor.process(matrixData));
 
-      console.log('Initial render');
+    console.log('Initial render');
 
-			matrixRef.on('child_changed', function(snapshot) {
+		matrixRef.on('child_changed', function(snapshot) {
 
-        var key = snapshot.key,
-            hex = snapshot.val().hex;
+      var key = snapshot.key,
+          hex = snapshot.val().hex;
 
-				ledDisplay.updateDot(matrixProcessor.processDot(key, hex));
+			ledDisplay.updateDot(matrixProcessor.processDot(key, hex));
 
-        console.log('matrix child_changed: ', key, hex);
-			});
-
-      displayRef.on('child_changed', function(snapshot) {
-        console.log('display child_changed: ', snapshot.key);
-
-        if(snapshot.key === 'brightness') {
-          var brightness = snapshot.val();
-
-          matrixProcessor = new MatrixProcessor({ brightness: brightness });
-
-          ledDisplay.update(matrixProcessor.process(matrixData));
-        }
-      });
+      console.log('matrix child_changed: ', key, hex);
 		});
-	} else {
-		var keyframeRef = firebase.database().ref(`keyframes/${displayData.keyframe}`);
-		keyframeRef.once('value').then(function(snapshot) {
-			var keyframeData = snapshot.val();
 
-      var keyframeProcessor = new KeyframeProcessor(new MatrixProcessor(displayData));
-      var processedKeyframes = keyframeProcessor.process(keyframeData.frames);
+    displayRef.on('child_changed', function(snapshot) {
+      console.log('display child_changed: ', snapshot.key);
 
-      var animator = new Animator(processedKeyframes, {speed: keyframeData.speed});
+      if(snapshot.key === 'brightness') {
+        var brightness = snapshot.val();
 
-      animator.start(function(data) {
-        ledDisplay.updateDot(data);
-      });
-		});
-	}
+        matrixProcessor = new MatrixProcessor({ brightness: brightness });
+
+        ledDisplay.update(matrixProcessor.process(matrixData));
+      }
+    });
+	});
 });
