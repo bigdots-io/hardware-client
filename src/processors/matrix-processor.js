@@ -20,7 +20,7 @@ class MatrixProcessor {
     var rawCoordinates = key.split(':'),
         shadedHex = shadeHex(hex, -((100 - this.config.brightness) / 100)),
         rgb = hexToRgb(shadedHex);
-
+        
     return {
       y: parseInt(rawCoordinates[0], 10),
       x: parseInt(rawCoordinates[1], 10),
