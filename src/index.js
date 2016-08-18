@@ -12,6 +12,8 @@ firebase.initializeApp({
   databaseURL: "https://led-fiesta.firebaseio.com"
 });
 
+var matrixProcessor = new MatrixProcessor({brightness: 50});
+
 var loadingScene = new LoadingScene();
 
 var hardwareKey = "-KLZ3jG7vjm2grCj33y7";
