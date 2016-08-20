@@ -1,5 +1,3 @@
-# Sign Painter
+# Hardware Client
 
-This is the system task that is responsible for rendering, listening for matrix changes, and rerendering led panels when necessary.
-
-## Installing Upstart task
+This client is responsible for rendering an LED display on a device, most likely a raspberry pi, and automatically starting that render (and listening for changes) process on boot.
