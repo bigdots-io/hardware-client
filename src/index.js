@@ -1,7 +1,7 @@
 var firebase = require("firebase");
     LedDisplay = require("./led-display"),
     Animator = require('./animator'),
-    Display = require('bigdots-display'),
+    DisplayCoupler = require('display-coupler'),
     MatrixProcessor = require('./processors/matrix-processor'),
     KeyframeProcessor = require('./processors/keyframe-processor'),
     LoadingScene = require('./loading-scene');
@@ -33,11 +33,11 @@ hardwareRef.once('value', function(snapshot) {
 
   console.log('Starting up');
 
-  var display = new Display(hardwareData.display);
+  var displayCoupler = new DisplayCoupler(hardwareData.display, firebase.database());
 
   setTimeout(function() {
     loadingScene.stop();
-    display.load({
+    displayCoupler.load({
       onPixelChange: function(y, x, hex) {
         ledDisplay.updateDot(matrixProcessor.processDot(`${y}:${x}`, hex));
       }
