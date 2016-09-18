@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Install upstart"
+sudo apt-get install upstart
+
 echo "Copying upstart config to /etc/init"
 cp upstart/hardware-client.conf /etc/init/
 
