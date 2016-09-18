@@ -1,12 +1,12 @@
 # Hardware Client
 
-This client is responsible for rendering an LED display on a device, most likely a raspberry pi, and automatically starting that render (and listening for changes) process on boot.
+This client is responsible for rendering an LED display (and listening for changes) and automatically starting that render process on boot.
 
 *Note:* It is assumed you are running the hardware client on a Raspberry Pi 3!
 
 # Preparation
 
-Before we install the client software, make sure that you system is up to date...
+Before we install the client software, make sure that your system is up to date...
 
 `$ apt-get update && apt-get upgrade`
 
