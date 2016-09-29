@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node --harmony_destructuring lib/index.js
+node lib/index.js
