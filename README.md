@@ -8,17 +8,28 @@ This client is responsible for rendering an LED display (and listening for chang
 
 Before we install the client software, make sure that your system is up to date...
 
-`$ apt-get update && apt-get upgrade`
+`$ sudo apt-get update && sudo apt-get upgrade`
 
 Go ahead and reboot your pi for good measure.
 
-Next you'll need to install Node. The easiest way to do that is via [NVM](https://github.com/creationix/nvm). After installing NVM, you'll want to load Node 6.6.0 on your pi.
-
-`$ nvm install 6.6.0`
+Next you'll need to install Node 6.6.0 on your pi. The Node installation process mentioned in [this guide](http://thisdavej.com/beginners-guide-to-installing-node-js-on-a-raspberry-pi/) is fairly painless. Look for "Install Node.js".
 
 # Installation
 
-Checkout this repo on your device. Then run..
+Clone this repo on your device in your user's (using the `pi` user is just fine) home directory.
+
+Add a json config file to the root of this cloned directory that looks like this...
+
+```json
+{
+  "display": "YOUR-DISPLAY-KEY",
+  "rows": 32,
+  "chains": 3,
+  "parallel": 1
+}
+```
+
+ Then run..
 
 `$ sudo ./install.sh`
 
