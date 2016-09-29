@@ -18,6 +18,8 @@ Next you'll need to install Node 6.6.0 on your pi. The Node installation process
 
 Clone this repo on your device in your user's (using the `pi` user is just fine) home directory.
 
+`$ git clone https://github.com/bigdots-io/hardware-client.git`
+
 Add a json config file to the root of this cloned directory that looks like this...
 
 ```json
