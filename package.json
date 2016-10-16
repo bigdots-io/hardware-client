@@ -7,7 +7,7 @@
     "chai": "^3.5.0",
     "firebase": "3.3.0",
     "node-rpi-rgb-led-matrix": "bigdots-io/node-rpi-rgb-led-matrix.git",
-    "display-coupler": "bigdots-io/display-coupler.git#v0.14.1"
+    "display-coupler": "bigdots-io/display-coupler.git#v0.16.0"
   },
   "devDependencies": {},
   "scripts": {
