@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node start
+node lib/index.js

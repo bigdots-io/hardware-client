@@ -9,7 +9,7 @@
     "display-coupler": "bigdots-io/display-coupler.git#v0.17.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "npm index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
