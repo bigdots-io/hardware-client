@@ -6,7 +6,7 @@
   "dependencies": {
     "firebase": "3.5.2",
     "node-rpi-rgb-led-matrix": "bigdots-io/node-rpi-rgb-led-matrix.git",
-    "display-coupler": "bigdots-io/display-coupler.git#v0.19.0"
+    "display-coupler": "bigdots-io/display-coupler.git#v0.19.1"
   },
   "scripts": {
     "start": "npm index.js",
