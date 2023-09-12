@@ -2,7 +2,7 @@
 
 This client is responsible for rendering an LED display (and listening for changes) and automatically starting that render process on boot.
 
-*Note:* It is assumed you are running the hardware client on a Raspberry Pi 3!
+_Note:_ It is assumed you are running the hardware client on a Raspberry Pi 3!
 
 # Preparation
 
@@ -35,7 +35,7 @@ Add a json config file to the root of this cloned directory that looks like this
 }
 ```
 
- Then run..
+Then run..
 
 `$ sudo ./install.sh`
 
@@ -44,3 +44,11 @@ That should install a few more dependencies as well as install an upstart script
 `$ sudo start hardware-client`
 
 `$ sudo stop hardware-client`
+
+https://www.instructables.com/Disable-the-Built-in-Sound-Card-of-Raspberry-Pi/
+
+```
+curl -X POST http://192.168.4.104:3000/macros \
+   -H 'Content-Type: application/json' \
+   -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff", "brightness": 1 }}, {"macroName": "marquee", "macroConfig": {"brightness": 2}}]}'
+```
