@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node lib/index.js
+node lib/esm/index.js
