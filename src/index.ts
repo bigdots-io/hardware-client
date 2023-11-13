@@ -22,7 +22,7 @@ const matrix = new LedMatrix(
 );
 
 const engine = createDisplayEngine({
-  dimensions: { width: 64, height: 16 },
+  dimensions: { width: 96, height: 16 },
   onPixelsChange: (pixels) => {
     for (const pixel of pixels) {
       matrix
