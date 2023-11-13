@@ -22,13 +22,18 @@ const matrix = new LedMatrix(
 );
 
 const engine = createDisplayEngine({
-  dimensions: { width: 64, height: 16 },
-  onPixelChange: (pixel) => {
-    matrix
-      .brightness(pixel.brightness * 10)
-      .fgColor(parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16))
-      .setPixel(pixel.x, pixel.y)
-      .sync();
+  dimensions: { width: 96, height: 16 },
+  onPixelsChange: (pixels) => {
+    for (const pixel of pixels) {
+      matrix
+        .brightness(pixel.brightness * 10)
+        .fgColor(
+          parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16)
+        )
+        .setPixel(pixel.x, pixel.y);
+    }
+
+    matrix.sync();
   },
 });
 
