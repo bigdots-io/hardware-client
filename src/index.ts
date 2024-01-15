@@ -31,9 +31,9 @@ const engine = createDisplayEngine({
 });
 
 matrix.afterSync((mat, dt, t) => {
-  if (updateQueue.length === 0) return;
-
   console.log("queue", updateQueue.length);
+
+  if (updateQueue.length === 0) return;
   const pixelUpdates = updateQueue.shift();
 
   if (!pixelUpdates) return;
