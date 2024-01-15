@@ -20,6 +20,8 @@ program.parse(process.argv);
 
 const options = program.opts();
 
+console.log({ options });
+
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
