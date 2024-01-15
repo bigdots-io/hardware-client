@@ -2,6 +2,23 @@ import { createDisplayEngine, text } from "@bigdots-io/display-engine";
 import { GpioMapping, LedMatrix } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
+import { Command } from "commander";
+
+const program = new Command();
+
+program
+  .name("bigdots")
+  .description("Power a hardware LED board")
+  .version("0.1.0");
+
+program
+  .option("--rows <number>")
+  .option("--cols <number>")
+  .option("--chain-length <number>");
+
+program.parse(process.argv);
+
+const options = program.opts();
 
 const app = express();
 const port = 3000;
@@ -10,9 +27,9 @@ app.use(bodyParser.json());
 const matrix = new LedMatrix(
   {
     ...LedMatrix.defaultMatrixOptions(),
-    rows: 16,
-    cols: 32,
-    chainLength: 3,
+    rows: options.rows,
+    cols: options.cols,
+    chainLength: options.chainLength,
     hardwareMapping: GpioMapping.Regular,
   },
   {
@@ -24,7 +41,10 @@ const matrix = new LedMatrix(
 let updateQueue: any[][] = [];
 
 const engine = createDisplayEngine({
-  dimensions: { width: 96, height: 16 },
+  dimensions: {
+    width: options.cols * options.chainLength,
+    height: options.rows,
+  },
   onPixelsChange: (pixels) => {
     updateQueue.push(pixels);
   },
