@@ -21,22 +21,24 @@ const matrix = new LedMatrix(
   }
 );
 
+let newPixels: any[] = [];
+
 const engine = createDisplayEngine({
   dimensions: { width: 96, height: 16 },
   onPixelsChange: (pixels) => {
-    matrix.afterSync((mat, dt, t) => {
-      for (const pixel of pixels) {
-        matrix
-          .brightness(pixel.brightness * 10)
-          .fgColor(
-            parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16)
-          )
-          .setPixel(pixel.x, pixel.y);
-      }
-
-      setTimeout(() => matrix.sync(), 0);
-    });
+    newPixels = pixels;
   },
+});
+
+matrix.afterSync((mat, dt, t) => {
+  for (const pixel of newPixels) {
+    matrix
+      .brightness(pixel.brightness * 10)
+      .fgColor(parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16))
+      .setPixel(pixel.x, pixel.y);
+  }
+
+  setTimeout(() => matrix.sync(), 0);
 });
 
 matrix.sync();
