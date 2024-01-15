@@ -21,17 +21,24 @@ const matrix = new LedMatrix(
   }
 );
 
-let newPixels: any[] = [];
+let updateQueue: any[][] = [];
 
 const engine = createDisplayEngine({
   dimensions: { width: 96, height: 16 },
   onPixelsChange: (pixels) => {
-    newPixels = pixels;
+    updateQueue.push(pixels);
   },
 });
 
 matrix.afterSync((mat, dt, t) => {
-  for (const pixel of newPixels) {
+  if (updateQueue.length === 0) return;
+
+  console.log("queue", updateQueue.length);
+  const pixelUpdates = updateQueue.shift();
+
+  if (!pixelUpdates) return;
+
+  for (const pixel of pixelUpdates) {
     matrix
       .brightness(pixel.brightness * 10)
       .fgColor(parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16))
