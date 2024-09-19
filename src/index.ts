@@ -1,8 +1,9 @@
 import { createDisplayEngine, text } from "@bigdots-io/display-engine";
+import { Pixel } from "@bigdots-io/display-engine/lib/esm/types";
 import { GpioMapping, LedMatrix } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
-import { Command } from "commander";
+import { Command, InvalidArgumentError } from "commander";
 
 const program = new Command();
 
@@ -14,6 +15,7 @@ program
 program
   .option("--rows <number>")
   .option("--cols <number>")
+  .option("--brightness <number>")
   .option("--chain-length <number>");
 
 program.parse(process.argv);
@@ -40,7 +42,7 @@ const matrix = new LedMatrix(
   }
 );
 
-let updateQueue: any[][] = [];
+let updateQueue: Pixel[][] = [];
 
 const engine = createDisplayEngine({
   dimensions: {
@@ -52,6 +54,20 @@ const engine = createDisplayEngine({
   },
 });
 
+function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
+  const hexValues = [...rgba]
+    .filter((number, index) => !forceRemoveAlpha || index !== 3)
+    .map((number, index) => (index === 3 ? Math.round(number * 255) : number))
+    .map((number) => number.toString(16));
+
+  return (
+    "#" +
+    hexValues
+      .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
+      .join("")
+  );
+}
+
 matrix.afterSync((mat, dt, t) => {
   if (updateQueue.length > 0) {
     console.log("Queue:", updateQueue.length);
@@ -62,9 +78,9 @@ matrix.afterSync((mat, dt, t) => {
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
       matrix
-        .brightness(pixel.brightness * 10)
+        .brightness(options.brightness)
         .fgColor(
-          parseInt(pixel.hex ? pixel.hex.replace(/^#/, "") : "000000", 16)
+          parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
         )
         .setPixel(pixel.x, pixel.y);
     }
@@ -79,7 +95,6 @@ engine.render([
   text({
     text: "Ready!",
     color: "#FFFFFF",
-    brightness: 1,
   }),
 ]);
 
