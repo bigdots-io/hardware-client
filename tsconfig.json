@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "strict": true,
     "module": "NodeNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "isolatedModules": true,
     "outDir": "lib/esm",
     "declaration": true,

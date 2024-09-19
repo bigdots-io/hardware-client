@@ -1,5 +1,6 @@
 import { createDisplayEngine, text } from "@bigdots-io/display-engine";
-import { Pixel } from "@bigdots-io/display-engine/lib/esm/types";
+// @ts-expect-error moduleResolution:nodenext issue 54523
+import type { Pixel } from "@bigdots-io/display-engine";
 import { GpioMapping, LedMatrix } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
