@@ -89,7 +89,7 @@ matrix.afterSync((mat, dt, t) => {
     }
   }
 
-  setTimeout(() => matrix.sync(), 10);
+  //setTimeout(() => matrix.sync(), 0);
 });
 
 matrix.sync();
