@@ -60,12 +60,9 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
     .map((number, index) => (index === 3 ? Math.round(number * 255) : number))
     .map((number) => number.toString(16));
 
-  return (
-    "#" +
-    hexValues
-      .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
-      .join("")
-  );
+  return hexValues
+    .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
+    .join("");
 }
 
 matrix.afterSync((mat, dt, t) => {
