@@ -85,7 +85,8 @@ matrix.afterSync((mat, dt, t) => {
       matrix
         .brightness(parseInt(options.brightness, 10))
         .fgColor(
-          parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
+          // parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
+          parseInt("FFFFFF", 16)
         )
         .setPixel(pixel.x, pixel.y);
     }
