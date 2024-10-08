@@ -82,14 +82,14 @@ matrix.afterSync((mat, dt, t) => {
       console.log(pixel);
       matrix
         .brightness(options.brightness)
-        .fgColor(
+        ?.fgColor(
           parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
         )
-        .setPixel(pixel.x, pixel.y);
+        ?.setPixel(pixel.x, pixel.y);
     }
   }
 
-  //setTimeout(() => matrix.sync(), 0);
+  setTimeout(() => matrix.sync(), 0);
 });
 
 matrix.sync();
