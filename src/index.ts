@@ -74,9 +74,6 @@ matrix.afterSync((mat, dt, t) => {
 
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
-      if (pixel.rgba) {
-        console.log(pixel.rgba, RGBAToHexA(pixel.rgba, true));
-      }
       matrix
         .brightness(parseInt(options.brightness, 10))
         .fgColor(
