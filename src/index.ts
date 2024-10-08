@@ -21,8 +21,6 @@ program.parse(process.argv);
 
 const options = program.opts();
 
-console.log({ options });
-
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
@@ -80,13 +78,12 @@ matrix.afterSync((mat, dt, t) => {
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
       if (pixel.rgba) {
-        console.log(RGBAToHexA(pixel.rgba, true));
+        console.log(pixel.rgba, RGBAToHexA(pixel.rgba, true));
       }
       matrix
         .brightness(parseInt(options.brightness, 10))
         .fgColor(
-          // parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
-          parseInt("FFFFFF", 16)
+          parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
         )
         .setPixel(pixel.x, pixel.y);
     }
