@@ -1,5 +1,5 @@
 import { createDisplayEngine, Pixel, text } from "@bigdots-io/display-engine";
-import { GpioMapping, LedMatrix } from "rpi-led-matrix";
+import { GpioMapping, LedMatrix, MatrixOptions } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
@@ -30,10 +30,13 @@ app.use(bodyParser.json());
 const matrix = new LedMatrix(
   {
     ...LedMatrix.defaultMatrixOptions(),
-    //rows: options.rows,
-    //cols: options.cols,
-    //chainLength: options.chainLength,
-    //hardwareMapping: GpioMapping.Regular,
+    rows: parseInt(options.rows, 10) as MatrixOptions["rows"],
+    cols: parseInt(options.cols, 10) as MatrixOptions["cols"],
+    chainLength: parseInt(
+      options.chainLength,
+      10
+    ) as MatrixOptions["chainLength"],
+    hardwareMapping: GpioMapping.Regular,
   },
   {
     ...LedMatrix.defaultRuntimeOptions(),
@@ -45,8 +48,8 @@ let updateQueue: Pixel[][] = [];
 
 const engine = createDisplayEngine({
   dimensions: {
-    width: options.cols * options.chainLength,
-    height: options.rows,
+    width: parseInt(options.cols, 10) * options.chainLength,
+    height: parseInt(options.rows, 10),
   },
   onPixelsChange: (pixels) => {
     updateQueue.push(pixels);
