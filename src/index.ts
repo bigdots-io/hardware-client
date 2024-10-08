@@ -41,71 +41,71 @@ const matrix = new LedMatrix(
   }
 );
 
-let updateQueue: Pixel[][] = [];
+// let updateQueue: Pixel[][] = [];
 
-const engine = createDisplayEngine({
-  dimensions: {
-    width: options.cols * options.chainLength,
-    height: options.rows,
-  },
-  onPixelsChange: (pixels) => {
-    updateQueue.push(pixels);
-  },
-});
+// const engine = createDisplayEngine({
+//   dimensions: {
+//     width: options.cols * options.chainLength,
+//     height: options.rows,
+//   },
+//   onPixelsChange: (pixels) => {
+//     updateQueue.push(pixels);
+//   },
+// });
 
-function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
-  const hexValues = [...rgba]
-    .filter((number, index) => !forceRemoveAlpha || index !== 3)
-    .map((number, index) => (index === 3 ? Math.round(number * 255) : number))
-    .map((number) => number.toString(16));
+// function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
+//   const hexValues = [...rgba]
+//     .filter((number, index) => !forceRemoveAlpha || index !== 3)
+//     .map((number, index) => (index === 3 ? Math.round(number * 255) : number))
+//     .map((number) => number.toString(16));
 
-  return (
-    "#" +
-    hexValues
-      .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
-      .join("")
-  );
-}
+//   return (
+//     "#" +
+//     hexValues
+//       .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
+//       .join("")
+//   );
+// }
 
-matrix.afterSync((mat, dt, t) => {
-  if (updateQueue.length > 0) {
-    console.log("Queue:", updateQueue.length);
-  }
+// matrix.afterSync((mat, dt, t) => {
+//   if (updateQueue.length > 0) {
+//     console.log("Queue:", updateQueue.length);
+//   }
 
-  const pixelUpdates = updateQueue.shift();
+//   const pixelUpdates = updateQueue.shift();
 
-  if (pixelUpdates) {
-    for (const pixel of pixelUpdates) {
-      matrix
-        .brightness(options.brightness)
-        .fgColor(
-          parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
-        )
-        .setPixel(pixel.x, pixel.y);
-    }
-  }
+//   if (pixelUpdates) {
+//     for (const pixel of pixelUpdates) {
+//       matrix
+//         .brightness(options.brightness)
+//         .fgColor(
+//           parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
+//         )
+//         .setPixel(pixel.x, pixel.y);
+//     }
+//   }
 
-  setTimeout(() => matrix.sync(), 0);
-});
+//   setTimeout(() => matrix.sync(), 0);
+// });
 
-matrix.sync();
+// matrix.sync();
 
-engine.render([
-  text({
-    text: "Ready!",
-    color: "#FFFFFF",
-  }),
-]);
+// engine.render([
+//   text({
+//     text: "Ready!",
+//     color: "#FFFFFF",
+//   }),
+// ]);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
 
-app.post("/macros", (req, res) => {
-  engine.render(req.body.macros);
-  res.status(204).send("received");
-});
+// app.post("/macros", (req, res) => {
+//   engine.render(req.body.macros);
+//   res.status(204).send("received");
+// });
 
-app.listen(port, () => {
-  console.log(`BigDots listening on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`BigDots listening on port ${port}`);
+// });
