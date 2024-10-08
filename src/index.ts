@@ -79,13 +79,15 @@ matrix.afterSync((mat, dt, t) => {
 
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
-      console.log(pixel, matrix, matrix.brightness, matrix.fgColor);
+      if (pixel.rgba) {
+        console.log(RGBAToHexA(pixel.rgba, true));
+      }
       matrix
         .brightness(parseInt(options.brightness, 10))
-        ?.fgColor(
+        .fgColor(
           parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
         )
-        ?.setPixel(pixel.x, pixel.y);
+        .setPixel(pixel.x, pixel.y);
     }
   }
 
