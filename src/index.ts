@@ -58,7 +58,7 @@ const engine = createDisplayEngine({
 
 function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
   const hexValues = [...rgba]
-    .filter((number, index) => !forceRemoveAlpha || index !== 3)
+    .filter((_number, index) => !forceRemoveAlpha || index !== 3)
     .map((number, index) => (index === 3 ? Math.round(number * 255) : number))
     .map((number) => number.toString(16));
 
@@ -79,6 +79,7 @@ matrix.afterSync((mat, dt, t) => {
 
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
+      console.log(pixel);
       matrix
         .brightness(options.brightness)
         .fgColor(
