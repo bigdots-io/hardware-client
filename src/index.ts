@@ -30,14 +30,14 @@ app.use(bodyParser.json());
 const matrix = new LedMatrix(
   {
     ...LedMatrix.defaultMatrixOptions(),
-    rows: options.rows,
-    cols: options.cols,
-    chainLength: options.chainLength,
-    hardwareMapping: GpioMapping.Regular,
+    //rows: options.rows,
+    //cols: options.cols,
+    //chainLength: options.chainLength,
+    //hardwareMapping: GpioMapping.Regular,
   },
   {
     ...LedMatrix.defaultRuntimeOptions(),
-    gpioSlowdown: 1,
+    //gpioSlowdown: 1,
   }
 );
 
