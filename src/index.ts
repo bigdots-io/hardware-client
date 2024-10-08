@@ -15,7 +15,8 @@ program
   .option("--rows <number>")
   .option("--cols <number>")
   .option("--brightness <number>")
-  .option("--chain-length <number>");
+  .option("--chain-length <number>")
+  .option("--debug <boolean>");
 
 program.parse(process.argv);
 
@@ -66,7 +67,7 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
 }
 
 matrix.afterSync((mat, dt, t) => {
-  if (updateQueue.length > 0) {
+  if (options.debug && updateQueue.length > 0) {
     console.log("Queue:", updateQueue.length);
   }
 
