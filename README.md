@@ -50,7 +50,11 @@ https://www.instructables.com/Disable-the-Built-in-Sound-Card-of-Raspberry-Pi/
 ```
 curl -X POST http://192.168.4.104:3000/macros \
    -H 'Content-Type: application/json' \
-   -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "rgba(255, 255, 255, 100)"}}]}'
+   -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
+
+   curl -X POST http://192.168.4.104:3000/macros \
+   -H 'Content-Type: application/json' \
+   -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
 ```
 
 sudo node lib/esm/index.js --rows 16 --cols 32 --chain-length 3
