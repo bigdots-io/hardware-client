@@ -52,6 +52,10 @@ curl -X POST http://192.168.4.104:3000/macros \
    -H 'Content-Type: application/json' \
    -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
 
+curl -X POST http://192.168.4.104:3000/macros \
+   -H 'Content-Type: application/json' \
+   -d '{"macros":[{"macroName": "ripple"}]}'
+
    curl -X POST http://192.168.4.104:3000/macros \
    -H 'Content-Type: application/json' \
    -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
