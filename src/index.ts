@@ -67,12 +67,19 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
 }
 
 matrix.afterSync((mat, dt, t) => {
+  performance.mark("mark_shift_start");
   if (options.debug && updateQueue.length > 0) {
     console.log("Queue:", updateQueue.length);
   }
 
   const pixelUpdates = updateQueue.shift();
+  performance.mark("mark_shift_end");
 
+  console.log(
+    performance.measure("measure_shift", "mark_shift_start", "mark_shift_end")
+  );
+
+  performance.mark("mark_led_matrix_start");
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
       matrix
@@ -83,6 +90,15 @@ matrix.afterSync((mat, dt, t) => {
         .setPixel(pixel.x, pixel.y);
     }
   }
+  performance.mark("mark_led_matrix_end");
+
+  console.log(
+    performance.measure(
+      "measure_led_matrix",
+      "mark_led_matrix_start",
+      "mark_led_matrix_end"
+    )
+  );
 
   setTimeout(() => matrix.sync(), 0);
 });
