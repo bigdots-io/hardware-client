@@ -3,6 +3,11 @@ import { GpioMapping, LedMatrix, MatrixOptions } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
+import { registerFont } from "canvas";
+
+registerFont("./fonts/PixelifySans-VariableFont_wght.ttf", {
+  family: "pixelify",
+});
 
 const program = new Command();
 
