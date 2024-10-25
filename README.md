@@ -48,17 +48,21 @@ That should install a few more dependencies as well as install an upstart script
 https://www.instructables.com/Disable-the-Built-in-Sound-Card-of-Raspberry-Pi/
 
 ```
-curl -X POST http://192.168.4.104:3000/macros \
+curl -X POST http://192.168.4.135:3000/macros \
    -H 'Content-Type: application/json' \
    -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
 
-curl -X POST http://192.168.4.104:3000/macros \
+curl -X POST http://192.168.4.135:3000/macros \
    -H 'Content-Type: application/json' \
    -d '{"macros":[{"macroName": "ripple"}]}'
 
-   curl -X POST http://192.168.4.104:3000/macros \
+   curl -X POST http://192.168.4.135:3000/macros \
    -H 'Content-Type: application/json' \
-   -d '{"macros":[{"macroName": "twinkle", "macroConfig": {"color": "#ffffff"}}, {"macroName": "marquee", "macroConfig": {"speed": 25, "color": "#228B22"}}]}'
+   -d '{"macros":[{"macroName": "marquee", "macroConfig": {"speed": 1, "color": "#228B22", "text": "hi", "direction": "horizontal"}}]}'
+
+curl -X POST http://192.168.4.135:3000/macros \
+   -H 'Content-Type: application/json' \
+   -d '{"macros":[{"macroName": "text", "macroConfig": {"font": "pixelify", "color": "#FFFFFF", "text": "small!", "fontSize": "20"}}]}'
 ```
 
 sudo node lib/esm/index.js --rows 16 --cols 32 --chain-length 3
