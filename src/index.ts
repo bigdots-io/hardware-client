@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import { Command } from "commander";
 import { registerFont } from "canvas";
 
-registerFont("./fonts/PixelifySans-VariableFont_wght.ttf", {
+registerFont("/fonts/PixelifySans-VariableFont_wght.ttf", {
   family: "pixelify",
 });
 
