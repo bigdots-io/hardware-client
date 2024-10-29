@@ -37,6 +37,7 @@ app.use(bodyParser.json());
 
 let matrix: LedMatrixInstance;
 let canvas: Canvas;
+let updateQueue: Pixel[][] = [];
 
 if (!options.emulate) {
   matrix = new LedMatrix(
@@ -57,8 +58,6 @@ if (!options.emulate) {
   );
 
   matrix.afterSync((mat, dt, t) => {
-    if (!updateQueue) return;
-
     if (options.debug && updateQueue.length > 0) {
       console.log("Queue:", updateQueue.length);
     }
@@ -81,8 +80,6 @@ if (!options.emulate) {
 
   matrix.sync();
 }
-
-let updateQueue: Pixel[][] = [];
 
 const engine = createDisplayEngine({
   dimensions: {
