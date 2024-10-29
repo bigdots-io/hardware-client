@@ -144,6 +144,7 @@ function loop() {
       text({
         text: "♥︎",
         color: "#CC5500",
+        fontSize: 20,
       }),
     ]);
   } else {
