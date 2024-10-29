@@ -57,7 +57,9 @@ if (!options.emulate) {
   );
 
   matrix.afterSync((mat, dt, t) => {
-    if (options.debug && updateQueue?.length > 0) {
+    if (!updateQueue) return;
+
+    if (options.debug && updateQueue.length > 0) {
       console.log("Queue:", updateQueue.length);
     }
 
