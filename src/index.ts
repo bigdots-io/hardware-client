@@ -1,13 +1,16 @@
 import { createDisplayEngine, Pixel, text } from "@bigdots-io/display-engine";
-import { GpioMapping, LedMatrix, MatrixOptions } from "rpi-led-matrix";
+import {
+  GpioMapping,
+  LedMatrix,
+  LedMatrixInstance,
+  MatrixOptions,
+} from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
-import { registerFont } from "canvas";
-
-registerFont("PixelifySans-VariableFont_wght.ttf", {
-  family: "pixelify",
-});
+import fs from "fs";
+import path from "path";
+import { Canvas } from "canvas";
 
 const program = new Command();
 
@@ -21,7 +24,8 @@ program
   .option("--cols <number>")
   .option("--brightness <number>")
   .option("--chain-length <number>")
-  .option("--debug <boolean>");
+  .option("--debug <boolean>")
+  .option("--emulate <boolean>");
 
 program.parse(process.argv);
 
@@ -31,22 +35,50 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 
-const matrix = new LedMatrix(
-  {
-    ...LedMatrix.defaultMatrixOptions(),
-    rows: parseInt(options.rows, 10) as MatrixOptions["rows"],
-    cols: parseInt(options.cols, 10) as MatrixOptions["cols"],
-    chainLength: parseInt(
-      options.chainLength,
-      10
-    ) as MatrixOptions["chainLength"],
-    hardwareMapping: GpioMapping.Regular,
-  },
-  {
-    ...LedMatrix.defaultRuntimeOptions(),
-    gpioSlowdown: 2,
-  }
-);
+let matrix: LedMatrixInstance;
+let canvas: Canvas;
+
+if (!options.emulate) {
+  matrix = new LedMatrix(
+    {
+      ...LedMatrix.defaultMatrixOptions(),
+      rows: parseInt(options.rows, 10) as MatrixOptions["rows"],
+      cols: parseInt(options.cols, 10) as MatrixOptions["cols"],
+      chainLength: parseInt(
+        options.chainLength,
+        10
+      ) as MatrixOptions["chainLength"],
+      hardwareMapping: GpioMapping.Regular,
+    },
+    {
+      ...LedMatrix.defaultRuntimeOptions(),
+      gpioSlowdown: 2,
+    }
+  );
+
+  matrix.afterSync((mat, dt, t) => {
+    if (options.debug && updateQueue.length > 0) {
+      console.log("Queue:", updateQueue.length);
+    }
+
+    const pixelUpdates = updateQueue.shift();
+
+    if (pixelUpdates) {
+      for (const pixel of pixelUpdates) {
+        matrix
+          .brightness(parseInt(options.brightness, 10))
+          .fgColor(
+            parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
+          )
+          .setPixel(pixel.x, pixel.y);
+      }
+    }
+
+    setTimeout(() => matrix.sync(), 0);
+  });
+
+  matrix.sync();
+}
 
 let updateQueue: Pixel[][] = [];
 
@@ -55,7 +87,8 @@ const engine = createDisplayEngine({
     width: parseInt(options.cols, 10) * options.chainLength,
     height: parseInt(options.rows, 10),
   },
-  onPixelsChange: (pixels) => {
+  onPixelsChange: (pixels, index, engineCanvas) => {
+    canvas = engineCanvas;
     updateQueue.push(pixels);
   },
 });
@@ -71,38 +104,16 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
     .join("");
 }
 
-matrix.afterSync((mat, dt, t) => {
-  if (options.debug && updateQueue.length > 0) {
-    console.log("Queue:", updateQueue.length);
-  }
-
-  const pixelUpdates = updateQueue.shift();
-
-  if (pixelUpdates) {
-    for (const pixel of pixelUpdates) {
-      matrix
-        .brightness(parseInt(options.brightness, 10))
-        .fgColor(
-          parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
-        )
-        .setPixel(pixel.x, pixel.y);
-    }
-  }
-
-  setTimeout(() => matrix.sync(), 0);
-});
-
-matrix.sync();
-
 engine.render([
   text({
-    text: "Ready!",
+    text: "HI",
     color: "#FFFFFF",
   }),
 ]);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.setHeader("Content-Type", "image/png");
+  canvas.createPNGStream().pipe(res);
 });
 
 app.post("/macros", (req, res) => {
@@ -113,3 +124,31 @@ app.post("/macros", (req, res) => {
 app.listen(port, () => {
   console.log(`BigDots listening on port ${port}`);
 });
+
+const ONE_MINUTE = 1 * 60 * 1000;
+
+function loop() {
+  const hour = new Date().getHours();
+
+  console.log({ hour });
+
+  if (hour >= 6 && hour <= 18) {
+    engine.render([
+      text({
+        text: "🔥",
+        color: "#FFFFFF",
+      }),
+    ]);
+  } else {
+    engine.render([
+      text({
+        text: "🛏️",
+        color: "#FFFFFF",
+      }),
+    ]);
+  }
+}
+
+setInterval(loop, ONE_MINUTE);
+
+loop();

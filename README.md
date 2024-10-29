@@ -62,7 +62,7 @@ curl -X POST http://192.168.4.135:3000/macros \
 
 curl -X POST http://192.168.4.135:3000/macros \
    -H 'Content-Type: application/json' \
-   -d '{"macros":[{"macroName": "text", "macroConfig": {"font": "pixelify", "color": "#FFFFFF", "text": "small!", "fontSize": "20"}}]}'
+   -d '{"macros":[{"macroName": "text", "macroConfig": {"font": "pixelify", "color": "#FFFFFF", "text": "small!", "fontSize": "5"}}]}'
 ```
 
 sudo node lib/esm/index.js --rows 16 --cols 32 --chain-length 3
