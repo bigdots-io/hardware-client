@@ -147,9 +147,11 @@ function loop() {
       }),
     ]);
   } else {
-    coordinates({
-      coordinates: rainbow,
-    });
+    engine.render([
+      coordinates({
+        coordinates: rainbow,
+      }),
+    ]);
   }
 }
 
