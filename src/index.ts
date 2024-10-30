@@ -148,7 +148,7 @@ function loop() {
     ]);
   } else {
     coordinates({
-      coordinates: moon,
+      coordinates: rainbow,
     });
   }
 }
