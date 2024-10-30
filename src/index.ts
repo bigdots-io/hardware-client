@@ -32,6 +32,8 @@ program
   .option("--cols <number>")
   .option("--brightness <number>")
   .option("--chain-length <number>")
+  .option("--multiplexing <number>")
+  .option("--parallel <number>")
   .option("--debug <boolean>")
   .option("--emulate <boolean>");
 
@@ -53,6 +55,11 @@ if (!options.emulate) {
       ...LedMatrix.defaultMatrixOptions(),
       rows: parseInt(options.rows, 10) as MatrixOptions["rows"],
       cols: parseInt(options.cols, 10) as MatrixOptions["cols"],
+      parallel: parseInt(options.parallel, 10) as MatrixOptions["parallel"],
+      multiplexing: parseInt(
+        options.multiplexing,
+        10
+      ) as MatrixOptions["multiplexing"],
       chainLength: parseInt(
         options.chainLength,
         10
