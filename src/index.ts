@@ -19,6 +19,7 @@ import fs from "fs";
 import path from "path";
 import { Canvas } from "canvas";
 import { moon } from "./moon.js";
+import { rainbow } from "./rainbow.js";
 
 const program = new Command();
 
@@ -142,7 +143,7 @@ function loop() {
   if (hour >= 6 && hour <= 18) {
     engine.render([
       coordinates({
-        coordinates: moon,
+        coordinates: rainbow,
       }),
     ]);
   } else {
