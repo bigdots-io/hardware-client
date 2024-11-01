@@ -147,6 +147,11 @@ function loop() {
       }),
     ]);
   } else if (hour >= 6) {
+    engine.render([
+      text({
+        text: "",
+      }),
+    ]);
   }
 }
 
