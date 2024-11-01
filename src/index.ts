@@ -140,21 +140,24 @@ function loop() {
 
   console.log({ hour });
 
-  if (hour >= 6 && hour <= 18) {
+  if (hour >= 18 || hour <= 5) {
     engine.render([
       coordinates({
-        coordinates: rainbow,
+        coordinates: moon,
       }),
     ]);
-  } else {
-    engine.render([
-      coordinates({
-        coordinates: rainbow,
-      }),
-    ]);
+  } else if (hour >= 6) {
   }
 }
 
 setInterval(loop, ONE_MINUTE);
 
-loop();
+engine.render([
+  text({
+    text: "hi!...",
+  }),
+]);
+
+setTimeout(() => {
+  loop();
+}, 5000);

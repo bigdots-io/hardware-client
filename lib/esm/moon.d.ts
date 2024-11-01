@@ -332,7 +332,6 @@ export declare const moon: {
     "10:10": string;
     "11:10": string;
     "12:10": string;
-    "13:10": string;
     "14:10": string;
     "15:10": string;
     "16:10": string;
@@ -924,7 +923,6 @@ export declare const moon: {
     "26:28": string;
     "27:28": string;
     "28:28": string;
-    "29:28": string;
     "30:28": string;
     "31:28": string;
     "0:29": string;
@@ -955,9 +953,6 @@ export declare const moon: {
     "25:29": string;
     "26:29": string;
     "27:29": string;
-    "28:29": string;
-    "29:29": string;
-    "30:29": string;
     "31:29": string;
     "0:30": string;
     "1:30": string;
@@ -988,7 +983,6 @@ export declare const moon: {
     "26:30": string;
     "27:30": string;
     "28:30": string;
-    "29:30": string;
     "30:30": string;
     "31:30": string;
     "0:31": string;
