@@ -1,12 +1,16 @@
 import type { Macro, Pixel } from "@bigdots-io/display-engine";
 import type { LedMatrixInstance, MatrixOptions } from "rpi-led-matrix";
-import { createDisplayEngine, text } from "@bigdots-io/display-engine";
+import {
+  coordinates,
+  createDisplayEngine,
+  text,
+} from "@bigdots-io/display-engine";
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
 import { Canvas } from "canvas";
-import { scheduledSlots } from "./slots.js";
+import { scheduledSlots } from "./slots.ts";
 
 const program = new Command();
 
@@ -142,7 +146,14 @@ function loop() {
   }
 
   if (!slotFound) {
-    engine.render([text({ text: "none" })]);
+    engine.render([
+      coordinates({
+        coordinates: {
+          "0:0": "rgba(255, 255, 255, 0.2)",
+          "1:0": "rgba(255, 255, 255, 0.1)",
+        },
+      }),
+    ]);
   }
 }
 
