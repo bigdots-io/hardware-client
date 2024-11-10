@@ -9,6 +9,6 @@ Type=simple
 Restart=always
 RestartSec=5
 TimeoutStopSec=600
-ExecStart=sudo /usr/local/bin/node /usr/local/bin/hardware-client/lib/esm/index.js --rows 32 --cols 32 --chain-length 1 --brightness 50
+ExecStart=sudo /usr/local/bin/node --experimental-strip-types /usr/local/bin/hardware-client/src/index.ts --rows 32 --cols 32 --chain-length 1 --brightness 50
 [Install]
 WantedBy=default.target
