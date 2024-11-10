@@ -1,25 +1,12 @@
-import {
-  box,
-  coordinates,
-  createDisplayEngine,
-  image,
-  Pixel,
-  text,
-} from "@bigdots-io/display-engine";
-import {
-  GpioMapping,
-  LedMatrix,
-  LedMatrixInstance,
-  MatrixOptions,
-} from "rpi-led-matrix";
+import type { Macro, Pixel } from "@bigdots-io/display-engine";
+import type { LedMatrixInstance, MatrixOptions } from "rpi-led-matrix";
+import { createDisplayEngine, text } from "@bigdots-io/display-engine";
+import { LedMatrix, GpioMapping } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
-import fs from "fs";
-import path from "path";
 import { Canvas } from "canvas";
-import { moon } from "./moon.js";
-import { rainbow } from "./rainbow.js";
+import { scheduledSlots } from "./slots.js";
 
 const program = new Command();
 
@@ -133,36 +120,30 @@ app.listen(port, () => {
   console.log(`BigDots listening on port ${port}`);
 });
 
-const ONE_MINUTE = 1 * 60 * 1000;
+let activeMacros: Macro[] = [];
 
 function loop() {
   const hour = new Date().getHours();
 
-  console.log({ hour });
+  let slotFound = false;
 
-  if (hour >= 18 || hour <= 5) {
-    engine.render([
-      coordinates({
-        coordinates: moon,
-      }),
-    ]);
-  } else if (hour >= 6) {
-    engine.render([
-      text({
-        text: "",
-      }),
-    ]);
+  for (const schedulesSlot of scheduledSlots) {
+    if (hour >= schedulesSlot.start.hour || hour <= schedulesSlot.end.hour) {
+      if (
+        JSON.stringify(activeMacros) !== JSON.stringify(schedulesSlot.macros)
+      ) {
+        engine.render(schedulesSlot.macros);
+      } else {
+      }
+
+      activeMacros = schedulesSlot.macros;
+      slotFound = true;
+    }
+  }
+
+  if (!slotFound) {
+    engine.render([text({ text: "none" })]);
   }
 }
 
-setInterval(loop, ONE_MINUTE);
-
-engine.render([
-  text({
-    text: "hi!...",
-  }),
-]);
-
-setTimeout(() => {
-  loop();
-}, 5000);
+setInterval(loop, 1000);
