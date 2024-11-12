@@ -10,7 +10,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
 import { Canvas } from "canvas";
+import type { ScheduledSlot } from "./slots.ts";
 import { scheduledSlots } from "./slots.ts";
+import path from "path";
 
 const program = new Command();
 
@@ -110,7 +112,53 @@ engine.render([
   }),
 ]);
 
+app.use(express.static("public"));
+
+const toRegularTime = (militaryTime) => {
+  const [hours, minutes, seconds] = militaryTime.split(":");
+  return `${hours > 12 ? hours - 12 : hours}:${minutes}${
+    seconds ? `:${seconds}` : ""
+  } ${hours >= 12 ? "PM" : "AM"}`;
+};
+
+function buildMessage(overrideSlot: ScheduledSlot | null) {
+  if (overrideSlot === null) return;
+
+  const friendlyEnd = toRegularTime(
+    `${overrideSlot.end.hour}:${overrideSlot.end.minute || "00"}`
+  );
+
+  return `${overrideSlot.name} will automatically end at ${friendlyEnd}`;
+}
+
+app.get("/active_slot", (req, res) => {
+  const slot = overrideSlot || activeSlot;
+  const nextSlot = res.json({ message: buildMessage(slot), slot });
+});
+
+app.get("/scheduled_slots", (req, res) => {
+  res.json(scheduledSlots);
+});
+
+app.post("/nap", (req, res) => {
+  const hour = new Date().getHours();
+  const minute = new Date().getMinutes();
+
+  overrideSlot = {
+    name: "Nap",
+    start: { hour: hour, minute },
+    end: { hour: hour + 1, minute },
+    macros: [text({ text: "🔥", color: "#000000" })],
+  };
+
+  res.send();
+});
+
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/preview", (req, res) => {
   res.setHeader("Content-Type", "image/png");
   canvas.createPNGStream().pipe(res);
 });
@@ -124,36 +172,50 @@ app.listen(port, () => {
   console.log(`BigDots listening on port ${port}`);
 });
 
-let activeMacros: Macro[] = [];
+let overrideSlot: ScheduledSlot | null = null;
+let activeSlot: ScheduledSlot | null = null;
 
 function loop() {
   const hour = new Date().getHours();
 
   let slotFound = false;
 
-  for (const schedulesSlot of scheduledSlots) {
-    if (hour >= schedulesSlot.start.hour || hour <= schedulesSlot.end.hour) {
-      if (
-        JSON.stringify(activeMacros) !== JSON.stringify(schedulesSlot.macros)
-      ) {
-        engine.render(schedulesSlot.macros);
-      } else {
-      }
+  if (overrideSlot) {
+    engine.render(overrideSlot.macros);
+    activeSlot = overrideSlot;
+    slotFound = true;
+  } else {
+    for (const schedulesSlot of scheduledSlots) {
+      if (hour >= schedulesSlot.start.hour || hour <= schedulesSlot.end.hour) {
+        if (
+          JSON.stringify(activeSlot?.macros) !==
+          JSON.stringify(schedulesSlot.macros)
+        ) {
+          engine.render(schedulesSlot.macros);
+        } else {
+        }
 
-      activeMacros = schedulesSlot.macros;
-      slotFound = true;
+        activeSlot = schedulesSlot;
+        slotFound = true;
+      }
     }
   }
 
   if (!slotFound) {
-    engine.render([
-      coordinates({
-        coordinates: {
-          "0:0": "rgba(255, 255, 255, 0.2)",
-          "1:0": "rgba(255, 255, 255, 0.1)",
-        },
-      }),
-    ]);
+    activeSlot = {
+      name: "Default slot",
+      start: { hour: 0 },
+      end: { hour: 23 },
+      macros: [
+        coordinates({
+          coordinates: {
+            "0:0": "rgba(255, 255, 255, 0.1)",
+            "1:0": "rgba(255, 255, 255, 0.05)",
+          },
+        }),
+      ],
+    };
+    engine.render(activeSlot?.macros);
   }
 }
 
