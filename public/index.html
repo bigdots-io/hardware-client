@@ -4,21 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bigdots</title>
-    <style></style>
+    <style>
+      button {
+        font-size: 20px;
+      }
+      .hide {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <h1>Winnie's Moon Clock</h1>
     <h3>Currently showing:</h3>
     <img id="preview" src="/preview" width="100" />
     <div id="slot_message"></div>
-    <br />
+    <button id="clear_override" class="hide">Clear</button>
+    <br /><br />
+    <hr />
     <button id="nap">Nap</button>
     <button id="timeout">Timeout</button>
     <script>
       document.querySelector("#nap").addEventListener("click", async (ev) => {
         await fetch("/nap", { method: "POST" });
-        setTimeout(() => window.location.reload(), 100);
+        setTimeout(() => window.location.reload(), 500);
       });
+
+      document
+        .querySelector("#clear_override")
+        .addEventListener("click", async (ev) => {
+          await fetch("/clear_override", { method: "POST" });
+          setTimeout(() => window.location.reload(), 500);
+        });
 
       document
         .querySelector("#timeout")
@@ -32,6 +48,10 @@
         );
         document.querySelector("#slot_message").textContent =
           slotResponse.message;
+
+        document
+          .querySelector("#clear_override")
+          .classList.toggle("hide", !slotResponse.isOverride);
       })();
 
       function reloadImage() {

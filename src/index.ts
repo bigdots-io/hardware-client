@@ -149,7 +149,7 @@ function buildMessage(slot: ScheduledSlot | null) {
 
 app.get("/active_slot", (req, res) => {
   const slot = overrideSlot || activeSlot;
-  res.json({ message: buildMessage(slot), slot });
+  res.json({ message: buildMessage(slot), slot, isOverride: !!overrideSlot });
 });
 
 app.post("/nap", (req, res) => {
@@ -163,6 +163,11 @@ app.post("/nap", (req, res) => {
     macros: [scene({ sceneName: "bunny" })],
   };
 
+  res.send();
+});
+
+app.post("/clear_override", (req, res) => {
+  overrideSlot = null;
   res.send();
 });
 
