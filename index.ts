@@ -184,6 +184,7 @@ let activeSlot: ScheduledSlot | null = null;
 
 function loop() {
   const hour = new Date().getHours();
+  const minute = new Date().getMinutes();
 
   let slotFound = false;
 
@@ -193,7 +194,11 @@ function loop() {
     slotFound = true;
   } else {
     for (const schedulesSlot of scheduledSlots) {
-      if (hour >= schedulesSlot.start.hour || hour <= schedulesSlot.end.hour) {
+      if (
+        (hour >= schedulesSlot.start.hour &&
+          minute >= schedulesSlot.start.minute) ||
+        (hour <= schedulesSlot.end.hour && minute <= schedulesSlot.end.minute)
+      ) {
         if (
           JSON.stringify(activeSlot?.macros) !==
           JSON.stringify(schedulesSlot.macros)
