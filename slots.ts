@@ -10,9 +10,9 @@ export interface ScheduledSlot {
 
 export const scheduledSlots: ScheduledSlot[] = [
   {
-    name: "bedtime",
+    name: "Bedtime",
     start: { hour: 18 },
-    end: { hour: 5, minute: 30 },
+    end: { hour: 6, minute: 30 },
     macros: [scene({ sceneName: "moon" })],
   },
 ];

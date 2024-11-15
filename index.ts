@@ -1,8 +1,9 @@
-import type { Macro, Pixel } from "@bigdots-io/display-engine";
+import type { Pixel } from "@bigdots-io/display-engine";
 import type { LedMatrixInstance, MatrixOptions } from "rpi-led-matrix";
 import {
   coordinates,
   createDisplayEngine,
+  scene,
   text,
 } from "@bigdots-io/display-engine";
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
@@ -121,23 +122,34 @@ const toRegularTime = (militaryTime) => {
   } ${hours >= 12 ? "PM" : "AM"}`;
 };
 
-function buildMessage(overrideSlot: ScheduledSlot | null) {
-  if (overrideSlot === null) return;
+function getNextScheduledSlot() {
+  const hour = new Date().getHours();
 
-  const friendlyEnd = toRegularTime(
-    `${overrideSlot.end.hour}:${overrideSlot.end.minute || "00"}`
-  );
+  return scheduledSlots.sort(
+    (a, b) => a.start.hour - hour - (b.start.hour - hour)
+  )[0];
+}
 
-  return `${overrideSlot.name} will automatically end at ${friendlyEnd}`;
+function buildMessage(slot: ScheduledSlot | null) {
+  if (slot === null) return;
+
+  let friendlyEnd: string;
+
+  if (slot.name === "Default slot") {
+    const nextSlot = getNextScheduledSlot();
+    friendlyEnd = toRegularTime(
+      `${nextSlot.start.hour}:${nextSlot.start.minute || "00"}`
+    );
+    return `${nextSlot.name} will start at ${friendlyEnd}`;
+  } else {
+    friendlyEnd = toRegularTime(`${slot.end.hour}:${slot.end.minute || "00"}`);
+    return `${slot.name} will end at ${friendlyEnd}`;
+  }
 }
 
 app.get("/active_slot", (req, res) => {
   const slot = overrideSlot || activeSlot;
-  const nextSlot = res.json({ message: buildMessage(slot), slot });
-});
-
-app.get("/scheduled_slots", (req, res) => {
-  res.json(scheduledSlots);
+  res.json({ message: buildMessage(slot), slot });
 });
 
 app.post("/nap", (req, res) => {
@@ -147,8 +159,8 @@ app.post("/nap", (req, res) => {
   overrideSlot = {
     name: "Nap",
     start: { hour: hour, minute },
-    end: { hour: hour + 1, minute },
-    macros: [text({ text: "🔥", color: "#000000" })],
+    end: { hour: hour + 2, minute },
+    macros: [scene({ sceneName: "bunny" })],
   };
 
   res.send();
@@ -161,11 +173,6 @@ app.get("/", (req, res) => {
 app.get("/preview", (req, res) => {
   res.setHeader("Content-Type", "image/png");
   canvas.createPNGStream().pipe(res);
-});
-
-app.post("/macros", (req, res) => {
-  engine.render(req.body.macros);
-  res.status(204).send("received");
 });
 
 app.listen(port, () => {

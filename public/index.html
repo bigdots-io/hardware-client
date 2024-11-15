@@ -7,25 +7,28 @@
     <style></style>
   </head>
   <body>
+    <h1>Winnie's Moon Clock</h1>
+    <h3>Currently showing:</h3>
     <img id="preview" src="/preview" width="100" />
     <div id="slot_message"></div>
     <br />
-    <button id="nap">Nap Mode</button>
-
-    <pre id="override_slot" style="font-size: 11px"></pre>
-    <pre id="scheduled_slots" style="font-size: 11px"></pre>
+    <button id="nap">Nap</button>
+    <button id="timeout">Timeout</button>
     <script>
       document.querySelector("#nap").addEventListener("click", async (ev) => {
-        ev.preventDefault();
         await fetch("/nap", { method: "POST" });
+        setTimeout(() => window.location.reload(), 100);
       });
+
+      document
+        .querySelector("#timeout")
+        .addEventListener("click", async (ev) => {
+          alert("todo!");
+        });
 
       (async () => {
         const slotResponse = await fetch("/active_slot").then((response) =>
           response.json()
-        );
-        const scheduledSlots = await fetch("/scheduled_slots").then(
-          (response) => response.json()
         );
         document.querySelector("#slot_message").textContent =
           slotResponse.message;

@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "type": "module",
   "dependencies": {
-    "@bigdots-io/display-engine": "^0.13.0",
+    "@bigdots-io/display-engine": "^0.14.4",
+    "@napi-rs/canvas": "^0.1.60",
     "body-parser": "^1.20.2",
     "canvas": "^2.11.2",
     "commander": "^11.1.0",
