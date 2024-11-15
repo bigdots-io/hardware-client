@@ -11,9 +11,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
 import { Canvas } from "canvas";
-import type { ScheduledSlot } from "./slots.ts";
-import { scheduledSlots } from "./slots.ts";
 import path from "path";
+import { scheduledSlots } from "./slots.ts";
+import type { ScheduledSlot } from "./slots.ts";
 
 const program = new Command();
 

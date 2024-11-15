@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsc --watch",
-    "emulate": "node --experimental-strip-types index.ts --rows 32 --cols 32 --chain-length 1 --emulate true"
+    "emulate": "node --experimental-strip-types src/index.ts --rows 32 --cols 32 --chain-length 1 --emulate true"
   },
   "author": "",
   "license": "ISC",
