@@ -167,7 +167,7 @@ app.post("/nap", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(path.resolve(), "public", "index.html"));
 });
 
 app.get("/preview", (req, res) => {
@@ -216,8 +216,8 @@ function loop() {
   if (!slotFound) {
     activeSlot = {
       name: "Default slot",
-      start: { hour: 0 },
-      end: { hour: 23 },
+      start: { hour: 0, minute: 0 },
+      end: { hour: 23, minute: 59 },
       macros: [
         coordinates({
           coordinates: {
