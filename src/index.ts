@@ -13,7 +13,7 @@ import { Command } from "commander";
 import { Canvas } from "canvas";
 import path from "path";
 import { scheduledSlots } from "./slots.ts";
-import type { ScheduledSlot } from "./slots.ts";
+import type { Slot } from "./slots.ts";
 
 const program = new Command();
 
@@ -130,7 +130,7 @@ function getNextScheduledSlot() {
   )[0];
 }
 
-function buildMessage(slot: ScheduledSlot | null) {
+function buildMessage(slot: Slot | null) {
   if (slot === null) return;
 
   let friendlyEnd: string;
@@ -184,8 +184,26 @@ app.listen(port, () => {
   console.log(`BigDots listening on port ${port}`);
 });
 
-let overrideSlot: ScheduledSlot | null = null;
-let activeSlot: ScheduledSlot | null = null;
+let overrideSlot: Slot | null = null;
+let activeSlot: Slot | null = null;
+
+function isSlotActive(slot: Slot): boolean {
+  const hour = new Date().getHours();
+  const minute = new Date().getMinutes();
+
+  if (hour >= slot.start.hour || hour <= slot.end.hour) {
+    if (hour === slot.start.hour) {
+      return minute >= slot.start.minute;
+    }
+    if (hour === slot.end.hour) {
+      return minute < slot.end.minute;
+    }
+
+    return true;
+  }
+
+  return false;
+}
 
 function loop() {
   const hour = new Date().getHours();
@@ -194,12 +212,7 @@ function loop() {
   let slotFound = false;
 
   if (overrideSlot) {
-    if (
-      hour >= overrideSlot.start.hour &&
-      minute >= overrideSlot.start.minute &&
-      hour <= overrideSlot.end.hour &&
-      minute <= overrideSlot.end.minute
-    ) {
+    if (isSlotActive(overrideSlot)) {
       if (
         JSON.stringify(activeSlot?.macros) !==
         JSON.stringify(overrideSlot.macros)
@@ -213,20 +226,16 @@ function loop() {
       overrideSlot = null;
     }
   } else {
-    for (const schedulesSlot of scheduledSlots) {
-      if (
-        (hour >= schedulesSlot.start.hour &&
-          minute >= schedulesSlot.start.minute) ||
-        (hour <= schedulesSlot.end.hour && minute <= schedulesSlot.end.minute)
-      ) {
+    for (const scheduledSlot of scheduledSlots) {
+      if (isSlotActive(scheduledSlot)) {
         if (
           JSON.stringify(activeSlot?.macros) !==
-          JSON.stringify(schedulesSlot.macros)
+          JSON.stringify(scheduledSlot.macros)
         ) {
-          engine.render(schedulesSlot.macros);
+          engine.render(scheduledSlot.macros);
         }
 
-        activeSlot = schedulesSlot;
+        activeSlot = scheduledSlot;
         slotFound = true;
       }
     }
