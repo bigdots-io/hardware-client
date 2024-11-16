@@ -12,7 +12,7 @@ export const scheduledSlots: Slot[] = [
   {
     name: "Bedtime",
     start: { hour: 18, minute: 0 },
-    end: { hour: 8, minute: 30 },
+    end: { hour: 6, minute: 30 },
     macros: [scene({ sceneName: "moon" })],
   },
 ];
