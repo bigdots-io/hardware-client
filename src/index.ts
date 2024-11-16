@@ -159,7 +159,7 @@ app.post("/nap", (req, res) => {
   overrideSlot = {
     name: "Nap",
     start: { hour: hour, minute },
-    end: { hour: hour + 2, minute },
+    end: { hour: hour, minute: minute + 1 },
     macros: [scene({ sceneName: "bunny" })],
   };
 
@@ -194,9 +194,21 @@ function loop() {
   let slotFound = false;
 
   if (overrideSlot) {
-    engine.render(overrideSlot.macros);
-    activeSlot = overrideSlot;
-    slotFound = true;
+    if (
+      (hour >= overrideSlot.start.hour &&
+        minute >= overrideSlot.start.minute) ||
+      (hour <= overrideSlot.end.hour && minute <= overrideSlot.end.minute)
+    ) {
+      if (
+        JSON.stringify(activeSlot?.macros) !==
+        JSON.stringify(overrideSlot.macros)
+      ) {
+        engine.render(overrideSlot.macros);
+      }
+
+      activeSlot = overrideSlot;
+      slotFound = true;
+    }
   } else {
     for (const schedulesSlot of scheduledSlots) {
       if (
@@ -209,7 +221,6 @@ function loop() {
           JSON.stringify(schedulesSlot.macros)
         ) {
           engine.render(schedulesSlot.macros);
-        } else {
         }
 
         activeSlot = schedulesSlot;
