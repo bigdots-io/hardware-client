@@ -1,19 +1,22 @@
 import type { Pixel } from "@bigdots-io/display-engine";
 import type { LedMatrixInstance, MatrixOptions } from "rpi-led-matrix";
 import {
+  box,
   coordinates,
   createDisplayEngine,
   scene,
   text,
 } from "@bigdots-io/display-engine";
+import os from "os";
+import p1 from "./package.json" with { "type": "json" }
+
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
-import { Canvas } from "canvas";
-import path from "path";
 import { scheduledSlots } from "./slots.ts";
 import type { Slot } from "./slots.ts";
+import { createCanvas } from "canvas";
 
 const program = new Command();
 
@@ -39,8 +42,13 @@ const port = 3000;
 app.use(bodyParser.json());
 
 let matrix: LedMatrixInstance;
-let canvas: Canvas;
 let updateQueue: Pixel[][] = [];
+
+const canvas = createCanvas(
+  parseInt(options.cols, 10),
+  parseInt(options.rows, 10)
+);
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
 if (!options.emulate) {
   matrix = new LedMatrix(
@@ -90,7 +98,17 @@ const engine = createDisplayEngine({
     height: parseInt(options.rows, 10),
   },
   onPixelsChange: (pixels, index, engineCanvas) => {
-    canvas = engineCanvas;
+    for (const pixel of pixels) {
+      if (pixel.rgba && ctx) {
+        const id = ctx.createImageData(1, 1);
+        const data = id.data;
+        data[0] = pixel.rgba[0];
+        data[1] = pixel.rgba[1];
+        data[2] = pixel.rgba[2];
+        data[3] = pixel.rgba[3];
+        ctx.putImageData(id, pixel.x, pixel.y);
+      }
+    }
     updateQueue.push(pixels);
   },
 });
@@ -105,13 +123,6 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
     .map((string) => (string.length === 1 ? "0" + string : string)) // Adds 0 when length of one number is 1
     .join("");
 }
-
-engine.render([
-  text({
-    text: "HI",
-    color: "#FFFFFF",
-  }),
-]);
 
 app.use(express.static("public"));
 
@@ -135,7 +146,7 @@ function buildMessage(slot: Slot | null) {
 
   let friendlyEnd: string;
 
-  if (slot.name === "Default slot") {
+  if (slot.name === "Nothing") {
     const nextSlot = getNextScheduledSlot();
     friendlyEnd = toRegularTime(
       `${nextSlot.start.hour}:${nextSlot.start.minute || "00"}`
@@ -147,12 +158,12 @@ function buildMessage(slot: Slot | null) {
   }
 }
 
-app.get("/active_slot", (req, res) => {
+app.get("/api/active_slot", (req, res) => {
   const slot = overrideSlot || activeSlot;
   res.json({ message: buildMessage(slot), slot, isOverride: !!overrideSlot });
 });
 
-app.post("/nap", (req, res) => {
+app.post("/api/nap", (req, res) => {
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
 
@@ -162,21 +173,41 @@ app.post("/nap", (req, res) => {
     end: { hour: hour + 2, minute },
     macros: [scene({ sceneName: "bunny" })],
   };
+  loop()
 
   res.send();
 });
 
-app.post("/clear_override", (req, res) => {
+app.post("/api/change_override_time", (req, res) => {
+  const newEnd = new Date();
+
+  if(overrideSlot) {
+    newEnd.setHours(overrideSlot?.end.hour)
+    newEnd.setMinutes(overrideSlot?.end.minute + parseInt(req.query.min as string, 10))
+
+    const hour = newEnd.getHours();
+    const minute = newEnd.getMinutes();
+
+    overrideSlot.end = { hour, minute };
+      
+    loop()
+  }
+
+  res.send();
+});
+
+
+
+app.post("/api/clear_override", (req, res) => {
   overrideSlot = null;
+  loop()
   res.send();
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(path.resolve(), "public", "index.html"));
-});
 
-app.get("/preview", (req, res) => {
+app.get("/api/preview", (req, res) => {
   res.setHeader("Content-Type", "image/png");
+  ctx.scale(10, 10)
   canvas.createPNGStream().pipe(res);
 });
 
@@ -192,11 +223,12 @@ function isSlotActive(slot: Slot): boolean {
   const minute = new Date().getMinutes();
 
   if (hour >= slot.start.hour || hour <= slot.end.hour) {
-    if (hour === slot.start.hour) {
-      return minute >= slot.start.minute;
-    }
     if (hour === slot.end.hour) {
       return minute < slot.end.minute;
+    }
+
+    if (hour === slot.start.hour) {
+      return minute >= slot.start.minute;
     }
 
     return true;
@@ -206,9 +238,6 @@ function isSlotActive(slot: Slot): boolean {
 }
 
 function loop() {
-  const hour = new Date().getHours();
-  const minute = new Date().getMinutes();
-
   let slotFound = false;
 
   if (overrideSlot) {
@@ -243,7 +272,7 @@ function loop() {
 
   if (!slotFound) {
     activeSlot = {
-      name: "Default slot",
+      name: "Nothing",
       start: { hour: 0, minute: 0 },
       end: { hour: 23, minute: 59 },
       macros: [
@@ -258,5 +287,46 @@ function loop() {
     engine.render(activeSlot?.macros);
   }
 }
+
+async function wait(ms: number) {
+  return new Promise<void>(async (resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
+
+async function init() {
+  const hour = new Date().getHours();
+  const minute = new Date().getMinutes();
+
+  var networkInterfaces = os.networkInterfaces();
+
+
+  return new Promise<void>(async (resolve) => {
+    engine.render([
+      box({ backgroundColor: "#660000" }),
+      text({
+        text: `${hour}:${minute}`,
+        alignment: "center",
+        startingRow: 2,
+        fontSize: 13,
+      }),
+      text({
+        text: `v ${p1["version"]}`,
+        alignment: "center",
+        startingRow: 18,
+        fontSize: 8,
+        color: '#DDDDDD'
+      }),
+    ]);
+
+    await wait(2000);
+
+    resolve();
+  });
+}
+
+await init();
 
 setInterval(loop, 1000);

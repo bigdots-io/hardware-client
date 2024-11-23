@@ -11,12 +11,20 @@
       .hide {
         display: none;
       }
+      #preview {
+        border: 2px solid #000000;
+      }
+      body {
+        padding: 10px;
+      }
     </style>
   </head>
   <body>
     <h1>Winnie's Moon Clock</h1>
+
     <h3>Currently showing:</h3>
     <img id="preview" src="/preview" width="100" />
+    <div>Time: <span id="current_time"></span>
     <div id="slot_message"></div>
     <button id="clear_override" class="hide">Clear</button>
     <br /><br />
@@ -41,6 +49,8 @@
         .addEventListener("click", async (ev) => {
           alert("todo!");
         });
+
+      document.querySelector("#current_time").textContent = new Date().toLocaleTimeString();
 
       (async () => {
         const slotResponse = await fetch("/active_slot").then((response) =>
