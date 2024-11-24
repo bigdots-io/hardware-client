@@ -1,0 +1,14 @@
+[Unit]
+Description=Bigdots App
+After=network.target
+Wants=network.target
+[Service]
+User=root
+Group=root
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutStopSec=600
+ExecStart=cd /usr/local/bin/hardware-client/app && npm run preview
+[Install]
+WantedBy=default.target

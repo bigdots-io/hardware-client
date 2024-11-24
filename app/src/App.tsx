@@ -4,17 +4,14 @@ import "@mantine/core/styles.css";
 import useSWR from "swr";
 
 import {
-  ActionIcon,
   AppShell,
   Burger,
   Button,
   Card,
-  Flex,
   Group,
   MantineProvider,
   NavLink,
   Stack,
-  Text,
   Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -89,6 +86,7 @@ function Palette({
   );
 }
 
+// @ts-ignore
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 function App() {
@@ -140,7 +138,7 @@ function App() {
               />
             </Card.Section>
 
-            <Stack align="flex-start" gap="xs">
+            <Stack align="flex-start" gap="xs" pt={8}>
               <Title order={3}>
                 Currently showing {activeSlot?.slot?.name}
               </Title>

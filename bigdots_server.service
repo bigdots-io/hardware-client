@@ -1,0 +1,14 @@
+[Unit]
+Description=Bigdots Server
+After=network.target
+Wants=network.target
+[Service]
+User=root
+Group=root
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutStopSec=600
+ExecStart=sudo /usr/local/bin/node --experimental-strip-types /usr/local/bin/hardware-client/src/index.ts --rows 32 --cols 32 --chain-length 1 --brightness 30
+[Install]
+WantedBy=default.target

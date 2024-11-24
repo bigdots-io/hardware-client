@@ -141,6 +141,13 @@ function getNextScheduledSlot() {
   )[0];
 }
 
+function formattedMinute(minute) {
+  if(`${minute}`.length=== 1) {
+    return `0${minute}`
+  }
+  return minute
+}
+
 function buildMessage(slot: Slot | null) {
   if (slot === null) return;
 
@@ -149,11 +156,11 @@ function buildMessage(slot: Slot | null) {
   if (slot.name === "Nothing") {
     const nextSlot = getNextScheduledSlot();
     friendlyEnd = toRegularTime(
-      `${nextSlot.start.hour}:${nextSlot.start.minute || "00"}`
+      `${nextSlot.start.hour}:${formattedMinute(nextSlot.start.minute)}`
     );
     return `${nextSlot.name} will start at ${friendlyEnd}`;
   } else {
-    friendlyEnd = toRegularTime(`${slot.end.hour}:${slot.end.minute || "00"}`);
+    friendlyEnd = toRegularTime(`${slot.end.hour}:${formattedMinute(slot.end.minute)}`);
     return `${slot.name} will end at ${friendlyEnd}`;
   }
 }

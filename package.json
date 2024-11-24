@@ -4,10 +4,7 @@
   },
   "scripts": {
     "back:dev": "cd server && npm run emulate",
-    "back:start": "cd server && npm run start",
     "front:dev": "cd app && npm run dev",
-    "front:start": "cd app && npm run dev",
-    "dev": "concurrently --kill-others \"npm run back:dev\" \"npm run front:dev\"",
-    "start": "concurrently --kill-others \"npm run back:start\" \"npm run front:start\""
+    "dev": "concurrently --kill-others \"npm run back:dev\" \"npm run front:dev\""
   }
 }
