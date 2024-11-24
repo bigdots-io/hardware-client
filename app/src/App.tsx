@@ -99,7 +99,7 @@ function App() {
   const [opened, { toggle }] = useDisclosure();
 
   return (
-    <MantineProvider>
+    <MantineProvider forceColorScheme="dark">
       <AppShell
         header={{ height: 60 }}
         navbar={{
