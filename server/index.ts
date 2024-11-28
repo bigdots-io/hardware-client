@@ -4,21 +4,31 @@ import {
   box,
   coordinates,
   createDisplayEngine,
-  scene,
   text,
 } from "@bigdots-io/display-engine";
-import os from "os";
 import p1 from "./package.json" with { "type": "json" }
 
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
 import express from "express";
 import bodyParser from "body-parser";
 import { Command } from "commander";
-import { scheduledSlots } from "./slots.ts";
+import { defaultScheduledSlots } from "./slots.ts";
 import type { Slot } from "./slots.ts";
 import { createCanvas } from "canvas";
+import fs  from 'fs';
 
 const program = new Command();
+
+function loadSlots() {
+  try {
+    const file = fs.readFileSync(`./database.json`).toString();
+    return JSON.parse(file).slots;
+  } catch(e) {
+    return defaultScheduledSlots
+  }
+}
+
+let scheduledSlots = loadSlots();
 
 program
   .name("bigdots")
@@ -153,15 +163,15 @@ function buildMessage(slot: Slot | null) {
 
   let friendlyEnd: string;
 
-  if (slot.name === "Nothing") {
+  if (slot.scene === "nothing") {
     const nextSlot = getNextScheduledSlot();
     friendlyEnd = toRegularTime(
       `${nextSlot.start.hour}:${formattedMinute(nextSlot.start.minute)}`
     );
-    return `${nextSlot.name} will start at ${friendlyEnd}`;
+    return `${nextSlot.scene} will start at ${friendlyEnd}`;
   } else {
     friendlyEnd = toRegularTime(`${slot.end.hour}:${formattedMinute(slot.end.minute)}`);
-    return `${slot.name} will end at ${friendlyEnd}`;
+    return `${slot.scene} will end at ${friendlyEnd}`;
   }
 }
 
@@ -170,17 +180,44 @@ app.get("/api/active_slot", (req, res) => {
   res.json({ message: buildMessage(slot), slot, isOverride: !!overrideSlot });
 });
 
+app.get("/api/slots", (req, res) => {
+  res.json({ slots: scheduledSlots });
+});
+
+app.get("/api/scenes", (req, res) => {
+  const scenes = fs.readdirSync("../scenes").map(file => file.split('.')[0]);
+  res.json(scenes);
+});
+
+app.get("/api/scenes/:name", (req, res) => {
+  const scene = getSceneData(req.params.name)
+  res.json(scene);
+});
+
+app.post("/api/scenes/:name", (req, res) => {
+  const fileName = `../scenes/${req.params.name}`
+  console.log({fileName, scene: req.body.scene})
+  //fs.writeFileSync(fileName, JSON.stringify(req.body.scene, null, 2));
+  res.json(true);
+});
+
+app.put("/api/slots", (req, res) => {
+  scheduledSlots = req.body.slots
+  fs.writeFileSync('database.json', JSON.stringify({slots: scheduledSlots}, null, 2));
+  reloadPanel()
+  res.send(true);
+});
+
 app.post("/api/nap", (req, res) => {
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
 
   overrideSlot = {
-    name: "Nap",
     start: { hour: hour, minute },
     end: { hour: hour + 2, minute },
-    macros: [scene({ sceneName: "bunny" })],
+    scene: "bunny"
   };
-  loop()
+  reloadPanel()
 
   res.send();
 });
@@ -197,20 +234,17 @@ app.post("/api/change_override_time", (req, res) => {
 
     overrideSlot.end = { hour, minute };
       
-    loop()
+    reloadPanel()
   }
 
   res.send();
 });
 
-
-
 app.post("/api/clear_override", (req, res) => {
   overrideSlot = null;
-  loop()
+  reloadPanel()
   res.send();
 });
-
 
 app.get("/api/preview", (req, res) => {
   res.setHeader("Content-Type", "image/png");
@@ -244,16 +278,21 @@ function isSlotActive(slot: Slot): boolean {
   return false;
 }
 
-function loop() {
+function getSceneData(name) {
+  const file = fs.readFileSync(`../scenes/${name}.json`).toString();
+  return JSON.parse(file);
+}
+
+function reloadPanel() {
   let slotFound = false;
 
   if (overrideSlot) {
     if (isSlotActive(overrideSlot)) {
       if (
-        JSON.stringify(activeSlot?.macros) !==
-        JSON.stringify(overrideSlot.macros)
+        JSON.stringify(activeSlot?.scene) !==
+        JSON.stringify(overrideSlot.scene)
       ) {
-        engine.render(overrideSlot.macros);
+        engine.render([coordinates({ coordinates: getSceneData(overrideSlot.scene)})]);
       }
 
       activeSlot = overrideSlot;
@@ -265,10 +304,10 @@ function loop() {
     for (const scheduledSlot of scheduledSlots) {
       if (isSlotActive(scheduledSlot)) {
         if (
-          JSON.stringify(activeSlot?.macros) !==
-          JSON.stringify(scheduledSlot.macros)
+          JSON.stringify(activeSlot?.scene) !==
+          JSON.stringify(scheduledSlot.scene)
         ) {
-          engine.render(scheduledSlot.macros);
+          engine.render([coordinates({ coordinates: getSceneData(scheduledSlot.scene)})]);
         }
 
         activeSlot = scheduledSlot;
@@ -279,19 +318,11 @@ function loop() {
 
   if (!slotFound) {
     activeSlot = {
-      name: "Nothing",
       start: { hour: 0, minute: 0 },
       end: { hour: 23, minute: 59 },
-      macros: [
-        coordinates({
-          coordinates: {
-            "0:0": "rgba(255, 255, 255, 0.1)",
-            "1:0": "rgba(255, 255, 255, 0.05)",
-          },
-        }),
-      ],
+      scene: "nothing"
     };
-    engine.render(activeSlot?.macros);
+    engine.render([coordinates({ coordinates: getSceneData(activeSlot.scene)})]);
   }
 }
 
@@ -306,9 +337,6 @@ async function wait(ms: number) {
 async function init() {
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
-
-  var networkInterfaces = os.networkInterfaces();
-
 
   return new Promise<void>(async (resolve) => {
     engine.render([
@@ -336,4 +364,4 @@ async function init() {
 
 await init();
 
-setInterval(loop, 1000);
+setInterval(reloadPanel, 1000);
