@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/display.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.7.2"}
+{"root":["./src/app.tsx","./src/composer.tsx","./src/editslotsmodal.tsx","./src/panel.tsx","./src/display.tsx","./src/main.tsx","./src/vite-env.d.ts"],"version":"5.7.2"}

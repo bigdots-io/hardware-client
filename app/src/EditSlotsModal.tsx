@@ -9,7 +9,6 @@ import {
   NumberInput,
   Select,
   Stack,
-  TextInput,
 } from "@mantine/core";
 import useSWR from "swr";
 import { fetcher } from "./App";

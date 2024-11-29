@@ -9,6 +9,7 @@ Type=simple
 Restart=always
 RestartSec=5
 TimeoutStopSec=600
-ExecStart=sudo /usr/local/bin/node --experimental-strip-types /usr/local/bin/hardware-client/server/index.ts --rows 32 --cols 32 --chain-length 1 --brightness 30
+WorkingDirectory=/usr/local/bin/hardware-client/server
+ExecStart=sudo /usr/local/bin/node --experimental-strip-types index.ts --rows 32 --cols 32 --chain-length 1 --brightness 30
 [Install]
 WantedBy=default.target

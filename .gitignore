@@ -3,3 +3,4 @@ node-debug.log
 .DS_Store
 
 display-config.json
+server/database.json
