@@ -43,7 +43,7 @@ export function EditSlotsModal({
     form.setValues(slots);
   }, [slots]);
 
-  if (!slots) return null;
+  if (!slots || !scenes) return null;
 
   return (
     <Modal opened={opened} onClose={close} title="Edit Scheduled Slots">
@@ -115,7 +115,7 @@ export function EditSlotsModal({
                   placeholder="Scene"
                   variant="filled"
                   style={{ flex: 1 }}
-                  data={scenes.map((scene: any) => ({
+                  data={scenes?.map((scene: any) => ({
                     label: scene,
                     value: scene,
                   }))}
