@@ -194,10 +194,16 @@ app.get("/api/scenes/:name", (req, res) => {
   res.json(scene);
 });
 
-app.post("/api/scenes/:name", (req, res) => {
-  const fileName = `../scenes/${req.params.name}`
-  console.log({fileName, scene: req.body.scene})
-  //fs.writeFileSync(fileName, JSON.stringify(req.body.scene, null, 2));
+app.put("/api/scenes/:name", (req, res) => {
+  const fileName = `../scenes/${req.params.name}.json`
+  fs.writeFileSync(fileName, JSON.stringify(req.body.scene, null, 2));
+  res.json(true);
+});
+
+app.post("/api/scenes", (req, res) => {
+  console.log(req.body.name)
+  const fileName = `../scenes/${req.body.name}.json`
+  fs.writeFileSync(fileName, JSON.stringify({}, null, 2));
   res.json(true);
 });
 

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Display from "./display";
 import useSWR from "swr";
-import { Select } from "@mantine/core";
+import { Button, Group, Modal, Select, Stack, TextInput } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 
 function Color({
   color,
@@ -49,8 +51,8 @@ function Palette({
     for (const coordinate in matrix) {
       matrixColors.add(matrix[coordinate]);
     }
-    setColors([...colors, ...matrixColors]);
-  }, []);
+    setColors([...(matrixColors.size === 0 ? colors : []), ...matrixColors]);
+  }, [JSON.stringify(matrix)]);
   return (
     <div style={{ display: "flex", width: "100%" }}>
       {colors.map((color) => (
@@ -58,6 +60,7 @@ function Palette({
           color={color}
           setActiveColor={setActiveColor}
           activeColor={activeColor}
+          key={color}
         />
       ))}
       <form
@@ -77,13 +80,23 @@ function Palette({
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export function Composer() {
-  const [scene, setScene] = useState("moon");
+  const [scene, setScene] = useState<string | null>(null);
 
-  const { data: scenes } = useSWR("api/scenes", fetcher);
-  const { data: sceneData } = useSWR(scene && `api/scenes/${scene}`, fetcher);
+  const { data: scenes = [], mutate } = useSWR("api/scenes", fetcher);
+  const { data: sceneData } = useSWR(
+    scene && scene !== "new-scene" && `api/scenes/${scene}`,
+    fetcher
+  );
 
   const [activeColor, setActiveColor] = useState(null);
-  const [matrix, setMatrix] = useState({});
+  const [matrix, setMatrix] = useState(null);
+
+  const [opened, { open, close }] = useDisclosure();
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: { name: "" },
+  });
 
   useEffect(() => {
     if (!sceneData) return;
@@ -91,42 +104,77 @@ export function Composer() {
   }, [JSON.stringify(sceneData)]);
 
   return (
-    <div>
+    <Stack>
       <Select
-        placeholder="Scene"
+        placeholder="Select a scene..."
         variant="filled"
         style={{ flex: 1 }}
-        data={scenes?.map((scene: any) => ({
-          label: scene,
-          value: scene,
-        }))}
+        data={[
+          { label: "New scene", value: "new-scene" },
+          ...scenes?.map((scene: any) => ({
+            label: scene,
+            value: scene,
+          })),
+        ]}
         onChange={(value) => {
-          setScene(value as string);
+          if (value === "new-scene") {
+            return open();
+          }
+          setScene(value);
         }}
       />
-      <div style={{ display: "flex" }}>
-        <Palette
-          activeColor={activeColor}
-          setActiveColor={setActiveColor}
-          matrix={matrix}
-        />
-        <button
-          onClick={() => {
-            fetch(`/api/scenes/${scene}`, {
+      <Modal title="New scene" opened={opened} onClose={close}>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            console.log(values);
+            fetch(`/api/scenes`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ scene: matrix }),
+              body: JSON.stringify(values),
             });
-          }}
+            setScene(values.name);
+            mutate();
+            close();
+          })}
         >
-          Save
-        </button>
-      </div>
-      <Display
-        activeColor={activeColor}
-        matrix={matrix}
-        setMatrix={setMatrix}
-      ></Display>
-    </div>
+          <TextInput
+            label="Scene Name"
+            key={form.key("name")}
+            {...form.getInputProps("name")}
+          />
+          <Group justify="flex-end" mt="md">
+            <Button type="submit">Create</Button>
+          </Group>
+        </form>
+      </Modal>
+
+      {matrix && scene && (
+        <>
+          <div style={{ display: "flex" }}>
+            <Palette
+              activeColor={activeColor}
+              setActiveColor={setActiveColor}
+              matrix={matrix}
+            />
+            <button
+              onClick={() => {
+                fetch(`/api/scenes/${scene}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ scene: matrix }),
+                });
+              }}
+            >
+              Save
+            </button>
+          </div>
+          <Display
+            activeColor={activeColor}
+            matrix={matrix}
+            setMatrix={setMatrix}
+          ></Display>
+        </>
+      )}
+    </Stack>
   );
 }
