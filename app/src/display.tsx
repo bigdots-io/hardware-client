@@ -64,16 +64,16 @@ function Dot({
 }) {
   return (
     <div
-      data-coordinates={`${y}:${x}`}
+      data-coordinates={`${x}:${y}`}
       onClick={onClick}
       onMouseOver={onMouseOver}
       style={{
         backgroundColor: matrix[`${x}:${y}`] || "#000",
-        height: "80%",
-        width: "80%",
+        height: "90%",
+        width: "90%",
         display: "inline-block",
-        borderRadius: 100,
-        boxShadow: "1px 1px 1px #AAA",
+        borderRadius: 3,
+        boxShadow: "1px 1px 1px #333",
       }}
     ></div>
   );
@@ -100,9 +100,30 @@ export default function Display({
     <>
       <div
         ref={ref}
-        style={{ background: "#000", position: "relative" }}
+        style={{
+          background: "#000",
+          position: "relative",
+          touchAction: "none",
+        }}
         onMouseDown={() => setMouseDown(true)}
         onMouseUp={() => setMouseDown(false)}
+        onTouchMove={(e) => {
+          var touch = e.touches[0];
+
+          var element = document.elementFromPoint(
+            touch.clientX,
+            touch.clientY
+          ) as HTMLElement;
+
+          const { coordinates } = element?.dataset;
+
+          if (coordinates) {
+            setMatrix({
+              ...matrix,
+              [coordinates]: activeColor,
+            });
+          }
+        }}
       >
         <div style={{ zIndex: 1, position: "relative" }}>
           {[...Array(height).keys()].map((y) => (
