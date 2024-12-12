@@ -1,5 +1,5 @@
 [Unit]
-Description=Bigdots App
+Description=Moonclock App
 After=network.target
 Wants=network.target
 [Service]
@@ -9,7 +9,7 @@ Type=simple
 Restart=always
 RestartSec=5
 TimeoutStopSec=600
-WorkingDirectory=/usr/local/bin/hardware-client/app
-ExecStart=sudo npm run preview
+WorkingDirectory=/usr/local/bin/hardware-client/my-app
+ExecStart=sudo npm run start
 [Install]
 WantedBy=default.target
