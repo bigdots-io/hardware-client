@@ -115,4 +115,4 @@ setInterval(() => {
   } catch (e) {
     console.log("Error!", e);
   }
-}, 10000);
+}, 1000);
