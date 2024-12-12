@@ -10,6 +10,6 @@ Restart=always
 RestartSec=5
 TimeoutStopSec=600
 WorkingDirectory=/usr/local/bin/hardware-client/my-app
-ExecStart=sudo /usr/local/bin/node sudo node --experimental-strip-types index.ts --brightness 30
+ExecStart=sudo /usr/local/bin/node --experimental-strip-types index.ts --brightness 30
 [Install]
 WantedBy=default.target
