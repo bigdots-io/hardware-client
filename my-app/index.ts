@@ -85,27 +85,39 @@ const engine = createDisplayEngine({
 let activeSlot: any = null;
 
 setInterval(() => {
-  const database = getDatabase();
+  try {
+    const database = getDatabase();
 
-  const slotToActivate = database.activeSlot;
+    const slotToActivate = database.activeSlot;
 
-  const activeSlotSceneData = activeSlot
-    ? getSceneData(activeSlot.scene)
-    : null;
+    const activeSlotSceneData = activeSlot
+      ? getSceneData(activeSlot.scene)
+      : null;
 
-  const slotToActivateSceneData = slotToActivate
-    ? getSceneData(slotToActivate.scene)
-    : null;
+    const slotToActivateSceneData = slotToActivate
+      ? getSceneData(slotToActivate.scene)
+      : null;
 
-  if (!slotToActivateSceneData) return null;
+    if (!slotToActivateSceneData) return null;
 
-  if (activeSlotSceneData !== slotToActivateSceneData) {
-    console.log(`Slot update, rerendering! ${slotToActivate.scene}`);
-    engine?.render([
-      coordinates({
-        coordinates: getSceneData(slotToActivate.scene),
-      }),
-    ]);
-    activeSlot = slotToActivate;
+    console.log(
+      Object.keys(activeSlotSceneData).length,
+      Object.keys(slotToActivateSceneData).length
+    );
+
+    if (
+      JSON.stringify(activeSlotSceneData) !==
+      JSON.stringify(slotToActivateSceneData)
+    ) {
+      console.log(`Slot update, rerendering! ${slotToActivate.scene}`);
+      engine?.render([
+        coordinates({
+          coordinates: getSceneData(slotToActivate.scene),
+        }),
+      ]);
+      activeSlot = slotToActivate;
+    }
+  } catch (e) {
+    console.log("Error!", e);
   }
 }, 10000);
