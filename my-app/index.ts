@@ -1,7 +1,7 @@
 import { createDisplayEngine } from "@bigdots-io/display-engine";
 import type { Pixel } from "@bigdots-io/display-engine";
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
-import { reloadPanel } from "@/app/server/actions";
+import { reloadPanel } from "./src/app/server/actions";
 
 function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
   const hexValues = [...rgba]
