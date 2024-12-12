@@ -85,7 +85,7 @@ const engine = createDisplayEngine({
 setInterval(() => {
   const database = getDatabase();
 
-  const slotToActivate = database.overrideSlot || database.scheduledSlot;
+  const slotToActivate = database.overrideSlot || database.activeScheduledSlot;
 
   engine?.render([
     coordinates({
