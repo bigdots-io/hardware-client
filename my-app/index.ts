@@ -68,18 +68,16 @@ const engine = createDisplayEngine({
   },
 });
 
-export async function startPanelLoop() {
-  setInterval(() => {
-    const database = getDatabase();
+setInterval(() => {
+  const database = getDatabase();
 
-    const slotToActivate = database.overrideSlot || database.scheduledSlot;
+  const slotToActivate = database.overrideSlot || database.scheduledSlot;
 
-    console.log(getSceneData(slotToActivate.scene)["13:5"]);
+  console.log(getSceneData(slotToActivate.scene)["13:5"]);
 
-    engine?.render([
-      coordinates({
-        coordinates: getSceneData(slotToActivate.scene),
-      }),
-    ]);
-  }, 1000);
-}
+  engine?.render([
+    coordinates({
+      coordinates: getSceneData(slotToActivate.scene),
+    }),
+  ]);
+}, 1000);
