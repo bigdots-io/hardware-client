@@ -1,4 +1,4 @@
-import { Panel, Slot } from "./types";
+import { Panel, Slot } from "./types.ts";
 
 export const toRegularTime = (militaryTime) => {
   const [hours, minutes, seconds] = militaryTime.split(":");

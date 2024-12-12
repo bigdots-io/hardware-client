@@ -1,8 +1,8 @@
 "use server";
 
 import { coordinates, SceneName } from "@bigdots-io/display-engine";
-import { isSlotActive } from "../utils";
-import { DataKey, get, set } from "./db";
+import { isSlotActive } from "../utils.ts";
+import { DataKey, get, set } from "./db.ts";
 import fs from "fs";
 
 function getSceneData(name: string) {
