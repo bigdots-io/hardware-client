@@ -1,3 +1,5 @@
+"use server";
+
 import { coordinates, createDisplayEngine } from "@bigdots-io/display-engine";
 import type { Pixel, SceneName } from "@bigdots-io/display-engine";
 import { createCanvas } from "canvas";
@@ -21,43 +23,39 @@ function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
 let matrix: LedMatrixInstance;
 const updateQueue: Pixel[][] = [];
 
-if (true) {
-  matrix = new LedMatrix(
-    {
-      ...LedMatrix.defaultMatrixOptions(),
-      rows: 32,
-      cols: 32,
-      chainLength: 1,
-      hardwareMapping: GpioMapping.Regular,
-    },
-    {
-      ...LedMatrix.defaultRuntimeOptions(),
-      gpioSlowdown: 2,
-    }
-  );
-
-  matrix.afterSync(() => {
-    // if (options.debug && updateQueue.length > 0) {
-    //   console.log("Queue:", updateQueue.length);
-    // }
-
-    const pixelUpdates = updateQueue.shift();
-
-    if (pixelUpdates) {
-      for (const pixel of pixelUpdates) {
-        matrix
-          .brightness(30)
-          .fgColor(
-            parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
-          )
-          .setPixel(pixel.x, pixel.y);
-      }
-    }
-
-    setTimeout(() => matrix.sync(), 0);
-  });
-
-  matrix.sync();
+if (false) {
+  // console.log("yo");
+  // matrix = new LedMatrix(
+  //   {
+  //     ...LedMatrix.defaultMatrixOptions(),
+  //     rows: 32,
+  //     cols: 32,
+  //     chainLength: 1,
+  //     hardwareMapping: GpioMapping.Regular,
+  //   },
+  //   {
+  //     ...LedMatrix.defaultRuntimeOptions(),
+  //     gpioSlowdown: 2,
+  //   }
+  // );
+  // matrix.afterSync(() => {
+  //   // if (options.debug && updateQueue.length > 0) {
+  //   //   console.log("Queue:", updateQueue.length);
+  //   // }
+  //   const pixelUpdates = updateQueue.shift();
+  //   if (pixelUpdates) {
+  //     for (const pixel of pixelUpdates) {
+  //       matrix
+  //         .brightness(30)
+  //         .fgColor(
+  //           parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
+  //         )
+  //         .setPixel(pixel.x, pixel.y);
+  //     }
+  //   }
+  //   setTimeout(() => matrix.sync(), 0);
+  // });
+  // matrix.sync();
 }
 
 const engine = createDisplayEngine({
@@ -73,7 +71,7 @@ const engine = createDisplayEngine({
 const canvas = createCanvas(32, 32);
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
-export async function reloadPanel() {
+export async function reloadPanel(engine: any) {
   let slotFound = false;
 
   const scheduledSlots = get(DataKey.ScheduledSlots);
@@ -92,7 +90,7 @@ export async function reloadPanel() {
         JSON.stringify(activeSlot?.scene) !==
         JSON.stringify(slotToActivate.scene)
       ) {
-        engine.render([
+        engine?.render([
           coordinates({
             coordinates: await getSceneData(slotToActivate.scene),
           }),
@@ -121,8 +119,10 @@ export async function reloadPanel() {
     if (
       JSON.stringify(activeSlot?.scene) !== JSON.stringify(slotToActivate.scene)
     ) {
-      engine.render([
-        coordinates({ coordinates: await getSceneData(slotToActivate.scene) }),
+      engine?.render([
+        coordinates({
+          coordinates: await getSceneData(slotToActivate.scene),
+        }),
       ]);
     }
 
@@ -131,7 +131,7 @@ export async function reloadPanel() {
   }
 }
 
-export function startPanelLoop() {
+export async function startPanelLoop() {
   reloadPanel();
   setInterval(reloadPanel, 1000);
 }

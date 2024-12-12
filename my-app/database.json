@@ -2,14 +2,37 @@
   "scheduledSlots": [
     {
       "start": {
-        "hour": 14,
+        "hour": 18,
         "minute": 0
       },
       "end": {
-        "hour": 23,
+        "hour": 6,
         "minute": 30
       },
       "scene": "moon"
     }
-  ]
+  ],
+  "overrideSlot": {
+    "start": {
+      "hour": 22,
+      "minute": 3
+    },
+    "end": {
+      "hour": 24,
+      "minute": 3
+    },
+    "scene": "bunny"
+  },
+  "activeSlot": {
+    "start": {
+      "hour": 22,
+      "minute": 3
+    },
+    "end": {
+      "hour": 24,
+      "minute": 3
+    },
+    "scene": "bunny"
+  },
+  "activeScheduledSlot": null
 }

@@ -2,18 +2,21 @@ import { SceneName } from "@bigdots-io/display-engine";
 import { Slot } from "../types";
 import fs from "fs";
 
-function loadSlots(): Slot[] {
+function loadPersistedData(): Partial<DataTypes> {
   try {
     const file = fs.readFileSync(`./database.json`).toString();
-    return JSON.parse(file)[DataKey.ScheduledSlots];
+    return JSON.parse(file);
   } catch {
-    return [
-      {
-        start: { hour: 18, minute: 0 },
-        end: { hour: 6, minute: 30 },
-        scene: "moon",
-      },
-    ];
+    return {
+      [DataKey.ScheduledSlots]: [
+        {
+          start: { hour: 18, minute: 0 },
+          end: { hour: 6, minute: 30 },
+          scene: "moon",
+        },
+      ],
+      [DataKey.OverrideSlot]: null,
+    };
   }
 }
 
@@ -32,7 +35,7 @@ export interface DataTypes {
 }
 
 const db: DataTypes = {
-  [DataKey.ScheduledSlots]: loadSlots(),
+  [DataKey.ScheduledSlots]: [],
   [DataKey.OverrideSlot]: null,
   [DataKey.ActiveSlot]: {
     start: { hour: 0, minute: 0 },
@@ -40,6 +43,7 @@ const db: DataTypes = {
     scene: "nothing" as SceneName,
   },
   [DataKey.ActiveScheduledSlot]: null,
+  ...loadPersistedData(),
 };
 
 export function get<K extends DataKey>(key: K): DataTypes[K] {
@@ -48,11 +52,5 @@ export function get<K extends DataKey>(key: K): DataTypes[K] {
 
 export function set<K extends DataKey>(key: K, value: DataTypes[K]) {
   db[key] = value;
-
-  if (key === DataKey.ScheduledSlots) {
-    fs.writeFileSync(
-      "database.json",
-      JSON.stringify({ [DataKey.ScheduledSlots]: value }, null, 2)
-    );
-  }
+  fs.writeFileSync("database.json", JSON.stringify(db, null, 2));
 }

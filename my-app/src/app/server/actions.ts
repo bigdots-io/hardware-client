@@ -1,11 +1,12 @@
 "use server";
 
-import { coordinates } from "@bigdots-io/display-engine";
+import { coordinates, SceneName } from "@bigdots-io/display-engine";
 import fs from "fs";
 import { revalidatePath } from "next/cache";
 import { Panel, Slot } from "../types";
 import { DataKey, DataTypes, get, set } from "./db";
-import { reloadPanel, startPanelLoop } from "./panelLoop";
+import { startPanelLoop } from "./panelLoop";
+import { isSlotActive } from "../utils";
 
 export async function getPanel(): Promise<Panel> {
   const activeSlot =
@@ -63,6 +64,66 @@ export async function changeOverrideTime(amount: number) {
 export async function getSceneData(name: string) {
   const file = fs.readFileSync(`../scenes/${name}.json`).toString();
   return JSON.parse(file);
+}
+
+export async function reloadPanel(engine?: any) {
+  let slotFound = false;
+
+  const scheduledSlots = get(DataKey.ScheduledSlots);
+  const overrideSlot = get(DataKey.OverrideSlot);
+  const activeSlot = get(DataKey.ActiveSlot);
+
+  for (const scheduledSlot of scheduledSlots) {
+    if (isSlotActive(scheduledSlot)) {
+      if (!isSlotActive(overrideSlot)) {
+        set(DataKey.OverrideSlot, null);
+      }
+
+      const slotToActivate = overrideSlot || scheduledSlot;
+
+      if (
+        JSON.stringify(activeSlot?.scene) !==
+        JSON.stringify(slotToActivate.scene)
+      ) {
+        engine?.render([
+          coordinates({
+            coordinates: await getSceneData(slotToActivate.scene),
+          }),
+        ]);
+      }
+
+      set(DataKey.ActiveScheduledSlot, scheduledSlot);
+      set(DataKey.ActiveSlot, slotToActivate);
+
+      slotFound = true;
+    }
+  }
+
+  if (!slotFound) {
+    if (!isSlotActive(overrideSlot)) {
+      set(DataKey.OverrideSlot, null);
+    }
+    const blankSlot = {
+      start: { hour: 0, minute: 0 },
+      end: { hour: 23, minute: 59 },
+      scene: "nothing" as SceneName,
+    };
+
+    const slotToActivate = overrideSlot || blankSlot;
+
+    if (
+      JSON.stringify(activeSlot?.scene) !== JSON.stringify(slotToActivate.scene)
+    ) {
+      engine?.render([
+        coordinates({
+          coordinates: await getSceneData(slotToActivate.scene),
+        }),
+      ]);
+    }
+
+    set(DataKey.ActiveScheduledSlot, null);
+    set(DataKey.ActiveSlot, slotToActivate);
+  }
 }
 
 startPanelLoop();
