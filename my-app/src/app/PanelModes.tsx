@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Flex, Group, Modal, Stack, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { changeOverrideTime, setOverrideSlot } from "./server/actions";
 import { Panel } from "./types";
 import { IconTrash } from "@tabler/icons-react";

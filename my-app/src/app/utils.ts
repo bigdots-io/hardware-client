@@ -1,10 +1,13 @@
 import { Panel, Slot } from "./types.ts";
 
-export const toRegularTime = (militaryTime) => {
+export const toRegularTime = (militaryTime: string) => {
   const [hours, minutes, seconds] = militaryTime.split(":");
-  return `${hours > 12 ? hours - 12 : hours}:${minutes}${
-    seconds ? `:${seconds}` : ""
-  } ${hours >= 12 ? "PM" : "AM"}`;
+
+  const h = +hours;
+  const m = +minutes;
+  return `${h > 12 ? h - 12 : h}:${m}${seconds ? `:${seconds}` : ""} ${
+    h >= 12 ? "PM" : "AM"
+  }`;
 };
 
 export function getNextScheduledSlot(scheduledSlots: Slot[]) {

@@ -1,29 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import {
-  Accordion,
   ActionIcon,
   Badge,
   Button,
   Card,
-  Flex,
   Group,
   Menu,
-  Pill,
   rem,
-  Select,
-  Stack,
   Text,
-  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { changeOverrideTime, setOverrideSlot } from "./server/actions";
+import { setOverrideSlot } from "./server/actions";
 import Display from "./display";
 import { EditSlotsModal } from "./EditSlotsModal";
 import { buildMessage } from "./utils";
 import { Panel as PanelType } from "./types";
-import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import PanelModes from "./PanelModes";
 
 export default function Panel({
@@ -35,7 +28,6 @@ export default function Panel({
 }) {
   const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
   const [modesOpened, modesHandlers] = useDisclosure(false);
-  const [controlsOpen, setControlsOpen] = useState(false);
 
   console.log(panel);
 
@@ -55,7 +47,7 @@ export default function Panel({
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs">
           <Group justify="space-between">
-            <Text fw={700}>Winnie's Room</Text>
+            <Text fw={700}>Winnie&apos;s Room</Text>
             <Group>
               <Button
                 variant="light"
@@ -64,7 +56,7 @@ export default function Panel({
               >
                 Change
               </Button>
-              <Menu withinPortal position="bottom-end" shadow="sm">
+              <Menu position="bottom-end" shadow="sm">
                 <Menu.Target>
                   <ActionIcon variant="subtle" color="gray">
                     <IconDotsVertical

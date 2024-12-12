@@ -5,7 +5,7 @@ import {
   MacroConfig,
   MacroName,
   Pixel,
-} from "@bigdots-io/display-engine/lib/esm/types";
+} from "@bigdots-io/display-engine";
 import { createDisplayEngine } from "@bigdots-io/display-engine";
 
 export function updateDot(
@@ -33,7 +33,6 @@ export function updateDot(
 }
 
 function Row({
-  y,
   children,
   opacity,
 }: {
@@ -165,7 +164,7 @@ export default function Display({
           <Row y={y} opacity={adjustedBrightness} key={`row_${y}`}>
             {[...Array(width).keys()].map((x) => (
               <Column y={y} x={x} key={`row_${y}_col_${x}`}>
-                <Dot y={y} x={x} blocky />
+                <Dot y={y} x={x} blocky={blocky} />
               </Column>
             ))}
           </Row>

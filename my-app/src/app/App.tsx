@@ -16,7 +16,7 @@ const theme = createTheme({
   primaryColor: "cyan",
 });
 
-function App({ children }) {
+function App({ children }: { children: React.ReactNode }) {
   const [navOpened, { toggle: toggleNav }] = useDisclosure();
 
   return (
