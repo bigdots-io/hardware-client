@@ -1,24 +1,26 @@
+"use client";
+
 import "@mantine/core/styles.css";
 import {
   AppShell,
   Burger,
+  createTheme,
   Group,
   MantineProvider,
   NavLink,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Routes, Route } from "react-router";
-import { Panel } from "./Panel";
-import { Composer } from "./Composer";
+import Link from "next/link";
 
-// @ts-ignore
-export const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const theme = createTheme({
+  primaryColor: "cyan",
+});
 
-function App() {
+function App({ children }) {
   const [navOpened, { toggle: toggleNav }] = useDisclosure();
 
   return (
-    <MantineProvider forceColorScheme="dark">
+    <MantineProvider forceColorScheme="dark" theme={theme}>
       <AppShell
         header={{ height: 60 }}
         navbar={{
@@ -39,19 +41,12 @@ function App() {
             <div>Moon Clock</div>
           </Group>
         </AppShell.Header>
-
         <AppShell.Navbar p="md">
-          <NavLink href="/" label="Home" />
-          <NavLink href="/composer" label="Composer" />
+          <NavLink component={Link} href="/" label="Home" />
+          <NavLink component={Link} href="/composer" label="Composer" />
         </AppShell.Navbar>
 
-        <AppShell.Main>
-          <Routes>
-            <Route index element={<Panel />} />
-            <Route path="composer" element={<Composer />} />
-            <Route path="composer" element={<Composer />} />
-          </Routes>
-        </AppShell.Main>
+        <AppShell.Main>{children}</AppShell.Main>
       </AppShell>
     </MantineProvider>
   );

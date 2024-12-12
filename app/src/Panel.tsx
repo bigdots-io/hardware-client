@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useSWR from "swr";
-import { Button, Card, Group, Stack, Title } from "@mantine/core";
+import { Button, Card, Flex, Group, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { EditSlotsModal } from "./EditSlotsModal";
 import { fetcher } from "./App";
@@ -9,6 +9,7 @@ export function Panel() {
   const [imageSrc, setImageSrc] = useState("/api/preview");
   const { data: activeSlot, mutate } = useSWR("api/active_slot", fetcher);
   const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
+  const [controlsOpen, setControlsOpen] = useState(false);
 
   return (
     <>
@@ -31,10 +32,30 @@ export function Panel() {
           />
         </Card.Section>
         <Stack align="flex-start" gap="xs" pt={8}>
-          <Title order={3}>Currently showing {activeSlot?.slot?.scene}</Title>
-          <>{activeSlot?.message}</>
+          <Flex gap="sm" w="100%">
+            <Stack flex="auto" gap="xs">
+              <Title order={3}>Showing {activeSlot?.activeSlot?.scene}</Title>
+              <>{activeSlot?.message}</>
+            </Stack>
+            <Button
+              onClick={async () => {
+                if (!activeSlot.overrideSlot) {
+                  await fetch("/api/override", {
+                    method: "PUT",
+                    body: JSON.stringify(activeSlot?.scheduledSlot),
+                    headers: { "Content-Type": "application/json" },
+                  });
+                  mutate();
+                  setImageSrc("/api/preview?t=" + new Date().getTime());
+                }
+                setControlsOpen((v) => !v);
+              }}
+            >
+              Edit
+            </Button>
+          </Flex>
 
-          {!activeSlot?.isOverride && (
+          {!controlsOpen && (
             <Stack w="100%">
               <Button
                 fullWidth
@@ -53,7 +74,7 @@ export function Panel() {
           )}
         </Stack>
 
-        {activeSlot?.isOverride && (
+        {controlsOpen && (
           <Stack gap="lg" pt={16}>
             <Group justify="space-between" grow>
               <Button
@@ -88,6 +109,7 @@ export function Panel() {
                 await fetch("/api/clear_override", { method: "POST" });
                 mutate();
                 setImageSrc("/api/preview?t=" + new Date().getTime());
+                setControlsOpen(false);
               }}
             >
               Clear

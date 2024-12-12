@@ -1,0 +1,15 @@
+{
+  "scheduledSlots": [
+    {
+      "start": {
+        "hour": 14,
+        "minute": 0
+      },
+      "end": {
+        "hour": 23,
+        "minute": 30
+      },
+      "scene": "moon"
+    }
+  ]
+}

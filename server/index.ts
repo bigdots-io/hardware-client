@@ -1,4 +1,4 @@
-import type { Pixel } from "@bigdots-io/display-engine";
+import type { Pixel, SceneName } from "@bigdots-io/display-engine";
 import type { LedMatrixInstance, MatrixOptions } from "rpi-led-matrix";
 import {
   box,
@@ -165,6 +165,7 @@ function buildMessage(slot: Slot | null) {
 
   if (slot.scene === "nothing") {
     const nextSlot = getNextScheduledSlot();
+    if(!nextSlot) return 'No scheduled slots';
     friendlyEnd = toRegularTime(
       `${nextSlot.start.hour}:${formattedMinute(nextSlot.start.minute)}`
     );
@@ -176,8 +177,8 @@ function buildMessage(slot: Slot | null) {
 }
 
 app.get("/api/active_slot", (req, res) => {
-  const slot = overrideSlot || activeSlot;
-  res.json({ message: buildMessage(slot), slot, isOverride: !!overrideSlot });
+  const activeSlot = overrideSlot || activeScheduledSlot;
+  res.json({ message: buildMessage(activeSlot), activeSlot, scheduledSlot:  activeScheduledSlot, overrideSlot });
 });
 
 app.get("/api/slots", (req, res) => {
@@ -210,6 +211,12 @@ app.post("/api/scenes", (req, res) => {
 app.put("/api/slots", (req, res) => {
   scheduledSlots = req.body.slots
   fs.writeFileSync('database.json', JSON.stringify({slots: scheduledSlots}, null, 2));
+  reloadPanel()
+  res.send(true);
+});
+
+app.put("/api/override", (req, res) => {
+  overrideSlot = req.body
   reloadPanel()
   res.send(true);
 });
@@ -264,12 +271,15 @@ app.listen(port, () => {
 
 let overrideSlot: Slot | null = null;
 let activeSlot: Slot | null = null;
+let activeScheduledSlot: Slot | null = null
 
-function isSlotActive(slot: Slot): boolean {
+function isSlotActive(slot: Slot | null): boolean {
+  if(slot === null) return false
+
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
 
-  if (hour >= slot.start.hour || hour <= slot.end.hour) {
+  if (hour >= slot.start.hour && hour <= slot.end.hour) {
     if (hour === slot.end.hour) {
       return minute < slot.end.minute;
     }
@@ -292,43 +302,48 @@ function getSceneData(name) {
 function reloadPanel() {
   let slotFound = false;
 
-  if (overrideSlot) {
-    if (isSlotActive(overrideSlot)) {
+  for (const scheduledSlot of scheduledSlots) {
+    if (isSlotActive(scheduledSlot)) {
+      if(!isSlotActive(overrideSlot)) {
+        overrideSlot = null
+      }
+
+      const slotToActivate = overrideSlot || scheduledSlot
+
       if (
         JSON.stringify(activeSlot?.scene) !==
-        JSON.stringify(overrideSlot.scene)
+        JSON.stringify(slotToActivate.scene)
       ) {
-        engine.render([coordinates({ coordinates: getSceneData(overrideSlot.scene)})]);
+        engine.render([coordinates({ coordinates: getSceneData(slotToActivate.scene)})]);
       }
 
-      activeSlot = overrideSlot;
+      activeScheduledSlot = scheduledSlot
+      activeSlot = slotToActivate;
       slotFound = true;
-    } else {
-      overrideSlot = null;
-    }
-  } else {
-    for (const scheduledSlot of scheduledSlots) {
-      if (isSlotActive(scheduledSlot)) {
-        if (
-          JSON.stringify(activeSlot?.scene) !==
-          JSON.stringify(scheduledSlot.scene)
-        ) {
-          engine.render([coordinates({ coordinates: getSceneData(scheduledSlot.scene)})]);
-        }
-
-        activeSlot = scheduledSlot;
-        slotFound = true;
-      }
     }
   }
 
   if (!slotFound) {
-    activeSlot = {
+    if(!isSlotActive(overrideSlot)) {
+      overrideSlot = null
+    } 
+    const blankSlot = {
       start: { hour: 0, minute: 0 },
       end: { hour: 23, minute: 59 },
-      scene: "nothing"
+      scene: "nothing" as SceneName
     };
-    engine.render([coordinates({ coordinates: getSceneData(activeSlot.scene)})]);
+    
+    const slotToActivate = overrideSlot || blankSlot;
+
+    if (
+      JSON.stringify(activeSlot?.scene) !==
+      JSON.stringify(slotToActivate.scene)
+    ) {
+      engine.render([coordinates({ coordinates: getSceneData(slotToActivate.scene)})]);
+    }
+
+    activeSlot = slotToActivate;
+    activeScheduledSlot = blankSlot
   }
 }
 
