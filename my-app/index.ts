@@ -87,9 +87,19 @@ let activeSlot: any = null;
 setInterval(() => {
   const database = getDatabase();
 
-  const slotToActivate = database.overrideSlot || database.activeScheduledSlot;
+  const slotToActivate = database.activeSlot;
 
-  if (JSON.stringify(activeSlot) !== JSON.stringify(slotToActivate.scene)) {
+  const activeSlotSceneData = activeSlot
+    ? getSceneData(activeSlot.scene)
+    : null;
+
+  const slotToActivateSceneData = slotToActivate
+    ? getSceneData(slotToActivate.scene)
+    : null;
+
+  if (!slotToActivateSceneData) return null;
+
+  if (activeSlotSceneData !== slotToActivateSceneData) {
     console.log(`Slot update, rerendering! ${slotToActivate.scene}`);
     engine?.render([
       coordinates({
