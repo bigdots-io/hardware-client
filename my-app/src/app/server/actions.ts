@@ -127,4 +127,4 @@ export async function reloadPanelState() {
 
 setInterval(() => {
   reloadPanelState();
-}, 5000);
+}, 1000);

@@ -92,4 +92,4 @@ setInterval(() => {
       coordinates: getSceneData(slotToActivate.scene),
     }),
   ]);
-}, 1000);
+}, 10000);
