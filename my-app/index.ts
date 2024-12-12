@@ -74,6 +74,8 @@ export async function startPanelLoop() {
 
     const slotToActivate = database.overrideSlot || database.scheduledSlot;
 
+    console.log(getSceneData(slotToActivate.scene)["13:5"]);
+
     engine?.render([
       coordinates({
         coordinates: getSceneData(slotToActivate.scene),
