@@ -51,6 +51,10 @@ export function get<K extends DataKey>(key: K): DataTypes[K] {
 }
 
 export function set<K extends DataKey>(key: K, value: DataTypes[K]) {
+  if (JSON.stringify(get(key)) === JSON.stringify(value)) {
+    return;
+  }
+
   db[key] = value;
   fs.writeFileSync("database.json", JSON.stringify(db, null, 2));
 }

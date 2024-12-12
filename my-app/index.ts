@@ -100,11 +100,6 @@ setInterval(() => {
 
     if (!slotToActivateSceneData) return null;
 
-    console.log(
-      Object.keys(activeSlotSceneData).length,
-      Object.keys(slotToActivateSceneData).length
-    );
-
     if (
       JSON.stringify(activeSlotSceneData) !==
       JSON.stringify(slotToActivateSceneData)

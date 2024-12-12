@@ -70,7 +70,6 @@ export async function reloadPanelState() {
 
   const scheduledSlots = get(DataKey.ScheduledSlots);
   const overrideSlot = get(DataKey.OverrideSlot);
-  const activeSlot = get(DataKey.ActiveSlot);
 
   for (const scheduledSlot of scheduledSlots) {
     if (isSlotActive(scheduledSlot)) {
@@ -80,19 +79,8 @@ export async function reloadPanelState() {
 
       const slotToActivate = overrideSlot || scheduledSlot;
 
-      if (
-        JSON.stringify(activeSlot?.scene) !==
-        JSON.stringify(slotToActivate.scene)
-      ) {
-        // engine?.render([
-        //   coordinates({
-        //     coordinates: await getSceneData(slotToActivate.scene),
-        //   }),
-        // ]);
-      }
-
-      set(DataKey.ActiveScheduledSlot, scheduledSlot);
       set(DataKey.ActiveSlot, slotToActivate);
+      set(DataKey.ActiveScheduledSlot, scheduledSlot);
 
       slotFound = true;
     }
@@ -110,18 +98,8 @@ export async function reloadPanelState() {
 
     const slotToActivate = overrideSlot || blankSlot;
 
-    if (
-      JSON.stringify(activeSlot?.scene) !== JSON.stringify(slotToActivate.scene)
-    ) {
-      // engine?.render([
-      //   coordinates({
-      //     coordinates: await getSceneData(slotToActivate.scene),
-      //   }),
-      // ]);
-    }
-
-    set(DataKey.ActiveScheduledSlot, null);
     set(DataKey.ActiveSlot, slotToActivate);
+    set(DataKey.ActiveScheduledSlot, null);
   }
 }
 
