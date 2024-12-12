@@ -92,7 +92,7 @@ setInterval(() => {
 
     const activeSlotSceneData = activeSlot
       ? getSceneData(activeSlot.scene)
-      : null;
+      : {};
 
     const slotToActivateSceneData = slotToActivate
       ? getSceneData(slotToActivate.scene)
