@@ -14,7 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { setOverrideSlot } from "./server/actions";
 import Display from "./display";
 import { EditSlotsModal } from "./EditSlotsModal";
-import { buildMessage, isSlotActive } from "./utils";
+import { buildMessage } from "./utils";
 import { Panel as PanelType } from "./types";
 import { IconDotsVertical } from "@tabler/icons-react";
 import PanelModes from "./PanelModes";
