@@ -29,11 +29,11 @@ export async function reloadPanel(engine?: any) {
         JSON.stringify(activeSlot?.scene) !==
         JSON.stringify(slotToActivate.scene)
       ) {
-        engine?.render([
-          coordinates({
-            coordinates: await getSceneData(slotToActivate.scene),
-          }),
-        ]);
+        // engine?.render([
+        //   coordinates({
+        //     coordinates: await getSceneData(slotToActivate.scene),
+        //   }),
+        // ]);
       }
 
       set(DataKey.ActiveScheduledSlot, scheduledSlot);
@@ -58,11 +58,11 @@ export async function reloadPanel(engine?: any) {
     if (
       JSON.stringify(activeSlot?.scene) !== JSON.stringify(slotToActivate.scene)
     ) {
-      engine?.render([
-        coordinates({
-          coordinates: await getSceneData(slotToActivate.scene),
-        }),
-      ]);
+      // engine?.render([
+      //   coordinates({
+      //     coordinates: await getSceneData(slotToActivate.scene),
+      //   }),
+      // ]);
     }
 
     set(DataKey.ActiveScheduledSlot, null);

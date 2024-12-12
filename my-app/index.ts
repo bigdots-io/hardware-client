@@ -1,7 +1,17 @@
-import { createDisplayEngine } from "@bigdots-io/display-engine";
+import { coordinates, createDisplayEngine } from "@bigdots-io/display-engine";
 import type { Pixel } from "@bigdots-io/display-engine";
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
-import { reloadPanel } from "./src/app/server/panelLoop";
+import fs from "fs";
+
+function getSceneData(name: string) {
+  const file = fs.readFileSync(`../scenes/${name}.json`).toString();
+  return JSON.parse(file);
+}
+
+function getDatabase() {
+  const file = fs.readFileSync(`./database.json`).toString();
+  return JSON.parse(file);
+}
 
 function RGBAToHexA(rgba: Uint8ClampedArray, forceRemoveAlpha = false) {
   const hexValues = [...rgba]
@@ -59,8 +69,15 @@ const engine = createDisplayEngine({
 });
 
 export async function startPanelLoop() {
-  reloadPanel(engine);
   setInterval(() => {
-    reloadPanel(engine);
+    const database = getDatabase();
+
+    const slotToActivate = database.overrideSlot || database.scheduledSlot;
+
+    engine?.render([
+      coordinates({
+        coordinates: getSceneData(slotToActivate.scene),
+      }),
+    ]);
   }, 1000);
 }
