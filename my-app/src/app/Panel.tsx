@@ -14,7 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { setOverrideSlot } from "./server/actions";
 import Display from "./display";
 import { EditSlotsModal } from "./EditSlotsModal";
-import { buildMessage } from "./utils";
+import { buildMessage, isSlotActive } from "./utils";
 import { Panel as PanelType } from "./types";
 import { IconDotsVertical } from "@tabler/icons-react";
 import PanelModes from "./PanelModes";
@@ -28,8 +28,6 @@ export default function Panel({
 }) {
   const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
   const [modesOpened, modesHandlers] = useDisclosure(false);
-
-  console.log(panel);
 
   return (
     <>
@@ -65,20 +63,7 @@ export default function Panel({
                   </ActionIcon>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item
-                    onClick={async () => {
-                      const hour = new Date().getHours();
-                      const minute = new Date().getMinutes();
-
-                      setOverrideSlot({
-                        start: { hour, minute },
-                        end: { hour: hour + 2, minute },
-                        scene: "bunny",
-                      });
-                    }}
-                  >
-                    Rename Panel
-                  </Menu.Item>
+                  <Menu.Item>Rename Panel</Menu.Item>
                   <Menu.Divider />
                   <Menu.Item
                     onClick={() => {

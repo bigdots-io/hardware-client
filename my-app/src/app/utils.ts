@@ -4,8 +4,7 @@ export const toRegularTime = (militaryTime: string) => {
   const [hours, minutes, seconds] = militaryTime.split(":");
 
   const h = +hours;
-  const m = +minutes;
-  return `${h > 12 ? h - 12 : h}:${m}${seconds ? `:${seconds}` : ""} ${
+  return `${h > 12 ? h - 12 : h}:${minutes}${seconds ? `:${seconds}` : ""} ${
     h >= 12 ? "PM" : "AM"
   }`;
 };
@@ -51,7 +50,7 @@ export function isSlotActive(slot: Slot | null): boolean {
   const hour = new Date().getHours();
   const minute = new Date().getMinutes();
 
-  if (hour >= slot.start.hour && hour <= slot.end.hour) {
+  if (hour >= slot.start.hour || hour <= slot.end.hour) {
     if (hour === slot.end.hour) {
       return minute < slot.end.minute;
     }

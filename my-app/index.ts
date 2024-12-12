@@ -82,14 +82,20 @@ const engine = createDisplayEngine({
   },
 });
 
+let activeSlot: any = null;
+
 setInterval(() => {
   const database = getDatabase();
 
   const slotToActivate = database.overrideSlot || database.activeScheduledSlot;
 
-  engine?.render([
-    coordinates({
-      coordinates: getSceneData(slotToActivate.scene),
-    }),
-  ]);
+  if (JSON.stringify(activeSlot) !== JSON.stringify(slotToActivate.scene)) {
+    console.log(`Slot update, rerendering! ${slotToActivate.scene}`);
+    engine?.render([
+      coordinates({
+        coordinates: getSceneData(slotToActivate.scene),
+      }),
+    ]);
+    activeSlot = slotToActivate;
+  }
 }, 10000);
