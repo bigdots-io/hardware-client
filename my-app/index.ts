@@ -2,6 +2,20 @@ import { coordinates, createDisplayEngine } from "@bigdots-io/display-engine";
 import type { Pixel } from "@bigdots-io/display-engine";
 import { LedMatrix, GpioMapping } from "rpi-led-matrix";
 import fs from "fs";
+import { Command } from "commander";
+
+const program = new Command();
+
+program
+  .name("bigdots")
+  .description("Power a hardware LED board")
+  .version("0.1.0");
+
+program.option("--brightness <number>").option("--debug <boolean>");
+
+program.parse(process.argv);
+
+const options = program.opts();
 
 function getSceneData(name: string) {
   const file = fs.readFileSync(`../scenes/${name}.json`).toString();
@@ -40,14 +54,14 @@ const matrix = new LedMatrix(
   }
 );
 matrix.afterSync(() => {
-  // if (options.debug && updateQueue.length > 0) {
-  //   console.log("Queue:", updateQueue.length);
-  // }
+  if (options.debug && updateQueue.length > 0) {
+    console.log("Queue:", updateQueue.length);
+  }
   const pixelUpdates = updateQueue.shift();
   if (pixelUpdates) {
     for (const pixel of pixelUpdates) {
       matrix
-        .brightness(30)
+        .brightness(parseInt(options.brightness, 10))
         .fgColor(
           parseInt(pixel.rgba ? RGBAToHexA(pixel.rgba, true) : "000000", 16)
         )
@@ -72,8 +86,6 @@ setInterval(() => {
   const database = getDatabase();
 
   const slotToActivate = database.overrideSlot || database.scheduledSlot;
-
-  console.log(getSceneData(slotToActivate.scene)["13:5"]);
 
   engine?.render([
     coordinates({
