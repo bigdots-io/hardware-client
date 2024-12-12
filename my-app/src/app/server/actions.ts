@@ -124,3 +124,7 @@ export async function reloadPanelState() {
     set(DataKey.ActiveSlot, slotToActivate);
   }
 }
+
+setInterval(() => {
+  reloadPanelState();
+}, 5000);
