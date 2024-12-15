@@ -88,9 +88,9 @@ setInterval(() => {
   try {
     const { activeSlot } = getDatabase();
 
-    const slotToActivateSceneData = getSceneData(
-      activeSlot?.scene || "nothing"
-    );
+    const activeSlotScene = activeSlot?.scene || "nothing";
+
+    const slotToActivateSceneData = getSceneData(activeSlotScene);
 
     const currentActiveSlotSceneData = getSceneData(
       currentActiveSlot?.scene || "nothing"
@@ -100,11 +100,11 @@ setInterval(() => {
       JSON.stringify(currentActiveSlotSceneData) !==
       JSON.stringify(slotToActivateSceneData)
     ) {
-      console.log(`Slot update, rerendering! ${activeSlot.scene}`);
+      console.log(`Slot update, rerendering! ${activeSlotScene}`);
 
       engine?.render([
         coordinates({
-          coordinates: getSceneData(activeSlot.scene),
+          coordinates: slotToActivateSceneData,
         }),
       ]);
 
