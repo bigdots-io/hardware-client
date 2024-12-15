@@ -61,7 +61,9 @@ export default function Panel({
                 <Button
                   variant="filled"
                   fullWidth
-                  onClick={async () => {
+                  onClick={async (ev) => {
+                    ev.preventDefault();
+
                     const hour = new Date().getHours();
                     const minute = new Date().getMinutes();
 
@@ -78,7 +80,9 @@ export default function Panel({
                 <Button
                   variant="filled"
                   fullWidth
-                  onClick={async () => {
+                  onClick={async (ev) => {
+                    ev.preventDefault();
+
                     const endDate = new Date();
                     endDate.setDate(endDate.getDate() + 1);
                     endDate.setHours(7, 0, 0, 0);
@@ -102,7 +106,9 @@ export default function Panel({
                 <Button
                   variant="light"
                   fullWidth
-                  onClick={async () => {
+                  onClick={async (ev) => {
+                    ev.preventDefault();
+
                     const endDate = new Date();
                     endDate.setDate(endDate.getDate() + 1);
                     endDate.setHours(7, 0, 0, 0);
