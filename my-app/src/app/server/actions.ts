@@ -1,26 +1,22 @@
 "use server";
 
-import { coordinates, SceneName } from "@bigdots-io/display-engine";
+import { coordinates } from "@bigdots-io/display-engine";
 import fs from "fs";
 import { revalidatePath } from "next/cache";
 import { Panel, Slot } from "../types";
-import { DataKey, DataTypes, get, set } from "./db";
+import { DataKey, get, set } from "./db";
 import { isSlotActive } from "../utils";
 
 export async function getPanel(): Promise<Panel> {
-  const activeSlot =
-    get(DataKey.OverrideSlot) || get(DataKey.ActiveScheduledSlot);
+  const activeSlot = get(DataKey.ActiveSlot);
 
   return {
-    activeSlot: get(DataKey.ActiveSlot),
-    scheduledSlot: get(DataKey.ActiveScheduledSlot),
-    overrideSlot: get(DataKey.OverrideSlot),
+    activeSlot,
     macros: [
       coordinates({
         coordinates: await getSceneData(activeSlot?.scene || "nothing"),
       }),
     ],
-    scheduledSlots: get(DataKey.ScheduledSlots),
   };
 }
 
@@ -28,34 +24,29 @@ export async function getScenes() {
   return fs.readdirSync("../scenes").map((file) => file.split(".")[0]);
 }
 
-export async function setOverrideSlot(slot: Slot | null) {
-  set(DataKey.OverrideSlot, slot);
-  reloadPanelState();
-  revalidatePath("/");
-}
-
-export async function updateScheduledSlots(
-  newScheduledSlots: DataTypes[DataKey.ScheduledSlots]
-) {
-  set(DataKey.ScheduledSlots, newScheduledSlots);
-  reloadPanelState();
+export async function setActiveSlot(slot: Slot | null) {
+  set(DataKey.ActiveSlot, slot);
   revalidatePath("/");
 }
 
 export async function changeOverrideTime(amount: number) {
   const newEnd = new Date();
 
-  const overrideSlot = get(DataKey.OverrideSlot);
+  const activeSlot = get(DataKey.ActiveSlot);
 
-  if (overrideSlot) {
-    newEnd.setHours(overrideSlot?.end.hour);
-    newEnd.setMinutes(overrideSlot?.end.minute + amount);
+  if (activeSlot) {
+    newEnd.setHours(activeSlot?.end.hour);
+    newEnd.setMinutes(activeSlot?.end.minute + amount);
 
     const hour = newEnd.getHours();
     const minute = newEnd.getMinutes();
 
-    overrideSlot.end = { hour, minute };
+    activeSlot.end = { hour, minute };
   }
+
+  set(DataKey.ActiveSlot, activeSlot);
+
+  reloadPanelState();
 
   revalidatePath("/");
 }
@@ -66,43 +57,11 @@ export async function getSceneData(name: string) {
 }
 
 export async function reloadPanelState() {
-  let slotFound = false;
+  const activeSlot = get(DataKey.ActiveSlot);
 
-  const scheduledSlots = get(DataKey.ScheduledSlots);
-  const overrideSlot = get(DataKey.OverrideSlot);
-
-  for (const scheduledSlot of scheduledSlots) {
-    if (isSlotActive(scheduledSlot)) {
-      if (!isSlotActive(overrideSlot)) {
-        set(DataKey.OverrideSlot, null);
-      }
-
-      const slotToActivate = overrideSlot || scheduledSlot;
-
-      set(DataKey.ActiveSlot, slotToActivate);
-      set(DataKey.ActiveScheduledSlot, scheduledSlot);
-
-      slotFound = true;
-    }
-  }
-
-  if (!slotFound) {
-    if (!isSlotActive(overrideSlot)) {
-      set(DataKey.OverrideSlot, null);
-    }
-    const blankSlot = {
-      start: { hour: 0, minute: 0 },
-      end: { hour: 23, minute: 59 },
-      scene: "nothing" as SceneName,
-    };
-
-    const slotToActivate = overrideSlot || blankSlot;
-
-    set(DataKey.ActiveSlot, slotToActivate);
-    set(DataKey.ActiveScheduledSlot, null);
+  if (!isSlotActive(activeSlot)) {
+    set(DataKey.ActiveSlot, null);
   }
 }
 
-setInterval(() => {
-  reloadPanelState();
-}, 1000);
+setInterval(() => reloadPanelState(), 1000);

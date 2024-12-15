@@ -82,35 +82,33 @@ const engine = createDisplayEngine({
   },
 });
 
-let activeSlot: any = null;
+let currentActiveSlot: any = null;
 
 setInterval(() => {
   try {
-    const database = getDatabase();
+    const { activeSlot } = getDatabase();
 
-    const slotToActivate = database.activeSlot;
+    const slotToActivateSceneData = getSceneData(
+      activeSlot?.scene || "nothing"
+    );
 
-    const activeSlotSceneData = activeSlot
-      ? getSceneData(activeSlot.scene)
-      : {};
-
-    const slotToActivateSceneData = slotToActivate
-      ? getSceneData(slotToActivate.scene)
-      : null;
-
-    if (!slotToActivateSceneData) return null;
+    const currentActiveSlotSceneData = getSceneData(
+      currentActiveSlot?.scene || "nothing"
+    );
 
     if (
-      JSON.stringify(activeSlotSceneData) !==
+      JSON.stringify(currentActiveSlotSceneData) !==
       JSON.stringify(slotToActivateSceneData)
     ) {
-      console.log(`Slot update, rerendering! ${slotToActivate.scene}`);
+      console.log(`Slot update, rerendering! ${activeSlot.scene}`);
+
       engine?.render([
         coordinates({
-          coordinates: getSceneData(slotToActivate.scene),
+          coordinates: getSceneData(activeSlot.scene),
         }),
       ]);
-      activeSlot = slotToActivate;
+
+      currentActiveSlot = activeSlot;
     }
   } catch (e) {
     console.log("Error!", e);

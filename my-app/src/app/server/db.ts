@@ -8,41 +8,21 @@ function loadPersistedData(): Partial<DataTypes> {
     return JSON.parse(file);
   } catch {
     return {
-      [DataKey.ScheduledSlots]: [
-        {
-          start: { hour: 18, minute: 0 },
-          end: { hour: 6, minute: 30 },
-          scene: "moon",
-        },
-      ],
-      [DataKey.OverrideSlot]: null,
+      [DataKey.ActiveSlot]: null,
     };
   }
 }
 
 export enum DataKey {
-  ScheduledSlots = "scheduledSlots",
-  OverrideSlot = "overrideSlot",
   ActiveSlot = "activeSlot",
-  ActiveScheduledSlot = "activeScheduledSlot",
 }
 
 export interface DataTypes {
-  scheduledSlots: Slot[];
-  overrideSlot: Slot | null;
-  activeSlot: Slot;
-  activeScheduledSlot: Slot | null;
+  activeSlot: Slot | null;
 }
 
 const db: DataTypes = {
-  [DataKey.ScheduledSlots]: [],
-  [DataKey.OverrideSlot]: null,
-  [DataKey.ActiveSlot]: {
-    start: { hour: 0, minute: 0 },
-    end: { hour: 23, minute: 59 },
-    scene: "nothing" as SceneName,
-  },
-  [DataKey.ActiveScheduledSlot]: null,
+  [DataKey.ActiveSlot]: null,
   ...loadPersistedData(),
 };
 
@@ -55,6 +35,6 @@ export function set<K extends DataKey>(key: K, value: DataTypes[K]) {
     return;
   }
 
-  db[key] = value;
+  db[key] = JSON.parse(JSON.stringify(value));
   fs.writeFileSync("database.json", JSON.stringify(db, null, 2));
 }
