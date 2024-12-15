@@ -15,14 +15,8 @@ export function formattedMinute(minute: number) {
   return `${minute}`.length === 1 ? `0${minute}` : minute;
 }
 
-export function formatSlotEndingTime(slot: Slot) {
-  if (slot.scene === "nothing") {
-    return "Forever";
-  } else {
-    return toRegularTime(
-      `${slot.end.hour}:${formattedMinute(slot.end.minute)}`
-    );
-  }
+export function formattedEndingTime(slot: Slot) {
+  return toRegularTime(`${slot.end.hour}:${formattedMinute(slot.end.minute)}`);
 }
 
 export function formatActiveSlotScene(slot: Slot) {

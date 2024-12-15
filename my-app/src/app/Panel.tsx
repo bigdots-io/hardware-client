@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ActionIcon,
   Badge,
   Box,
   Button,
@@ -9,16 +8,13 @@ import {
   Center,
   Flex,
   Group,
-  Menu,
-  rem,
   Stack,
   Text,
 } from "@mantine/core";
-import { changeOverrideTime, setActiveSlot } from "./server/actions";
+import { changeEndTime, setActiveSlot } from "./server/actions";
 import Display from "./display";
-import { formatActiveSlotScene, formatSlotEndingTime } from "./utils";
+import { formattedEndingTime } from "./utils";
 import { Panel as PanelType } from "./types";
-import { IconDotsVertical } from "@tabler/icons-react";
 
 export default function Panel({
   panel,
@@ -26,98 +22,42 @@ export default function Panel({
   panel: PanelType;
   scenes: string[];
 }) {
-  // const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
-
   return (
     <>
-      {/* <EditSlotsModal
-        opened={editSlotsOpened}
-        close={editSlotsHandlers.close}
-        scheduledSlots={panel.scheduledSlots}
-        scenes={scenes}
-      /> */}
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs">
           <Group justify="space-between">
             <Text fw={700}>Winnie&apos;s Room</Text>
-            <Group>
-              <Menu position="bottom-end" shadow="sm">
-                <Menu.Target>
-                  <ActionIcon variant="subtle" color="gray">
-                    <IconDotsVertical
-                      style={{ width: rem(16), height: rem(16) }}
-                    />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    onClick={() => {
-                      setActiveSlot(null);
-                    }}
-                  >
-                    Clear Scene
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Group>
+            {panel.activeSlot && (
+              <Button
+                variant="light"
+                color="red"
+                size="compact-sm"
+                onClick={() => {
+                  setActiveSlot(null);
+                }}
+              >
+                Clear
+              </Button>
+            )}
           </Group>
         </Card.Section>
         <Card.Section>
-          <Display
-            layers={panel.macros}
-            dimensions={{ height: 32, width: 32 }}
-            blocky
-          />
-          <Card withBorder={false}>
-            {panel.activeSlot ? (
-              <>
-                <Flex>
-                  <Box>
-                    <Stack gap={4}>
-                      <Center>
-                        <Text>{formatActiveSlotScene(panel.activeSlot)}</Text>
-                      </Center>
-                      <Badge
-                        color="gray"
-                        radius="sm"
-                        style={{
-                          height: 50,
-                          padding: "8px 16px",
-                          fontSize: 38,
-                          lineHeight: 38,
-                        }}
-                      >
-                        {formatSlotEndingTime(panel.activeSlot)}
-                      </Badge>
-                    </Stack>
-                  </Box>
-                  <Box flex="auto"></Box>
-                  <Flex gap="lg">
-                    <Stack gap={6}>
-                      <Button
-                        variant="filled"
-                        disabled={panel.activeSlot.scene == "nothing"}
-                        onClick={() => {
-                          changeOverrideTime(5);
-                        }}
-                      >
-                        +5 min
-                      </Button>
-                      <Button
-                        variant="filled"
-                        // disabled={!canDecreaseTime(panel)}
-                        onClick={() => {
-                          changeOverrideTime(-5);
-                        }}
-                      >
-                        -5 min
-                      </Button>
-                    </Stack>
-                  </Flex>
-                </Flex>
-              </>
-            ) : (
-              <Stack>
+          <div style={{ position: "relative" }}>
+            <Display
+              layers={panel.macros}
+              dimensions={{ height: 32, width: 32 }}
+              blocky
+            />
+            {!panel.activeSlot && (
+              <Stack
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
                 <Button
                   variant="filled"
                   fullWidth
@@ -133,7 +73,7 @@ export default function Panel({
                     close();
                   }}
                 >
-                  Start nap mode
+                  Nap Mode
                 </Button>
                 <Button
                   variant="filled"
@@ -157,11 +97,70 @@ export default function Panel({
                     close();
                   }}
                 >
-                  Start sleep mode
+                  Sleep Mode
+                </Button>
+                <Button
+                  variant="light"
+                  fullWidth
+                  onClick={async () => {
+                    const endDate = new Date();
+                    endDate.setDate(endDate.getDate() + 1);
+                    endDate.setHours(7, 0, 0, 0);
+
+                    const hour = new Date().getHours();
+                    const minute = new Date().getMinutes();
+
+                    setActiveSlot({
+                      start: { hour, minute },
+                      end: {
+                        hour: endDate.getHours(),
+                        minute: endDate.getMinutes(),
+                      },
+                      scene: "moon",
+                    });
+                    close();
+                  }}
+                >
+                  Custom...
                 </Button>
               </Stack>
             )}
-          </Card>
+          </div>
+
+          {panel.activeSlot && (
+            <Flex p="lg">
+              <Box>
+                <Stack gap={4}>
+                  <Center>
+                    <Text>Showing {panel.activeSlot.scene} until...</Text>
+                  </Center>
+                  <Badge
+                    color="gray"
+                    radius="sm"
+                    style={{
+                      height: 50,
+                      padding: "8px 16px",
+                      fontSize: 38,
+                      lineHeight: 38,
+                    }}
+                  >
+                    {formattedEndingTime(panel.activeSlot)}
+                  </Badge>
+                </Stack>
+              </Box>
+              <Box flex="auto"></Box>
+              <Flex gap="lg">
+                <Stack gap={8}>
+                  <Button variant="filled" onClick={() => changeEndTime(5)}>
+                    +5 min
+                  </Button>
+                  <Button variant="filled" onClick={() => changeEndTime(-5)}>
+                    -5 min
+                  </Button>
+                </Stack>
+              </Flex>
+            </Flex>
+          )}
         </Card.Section>
       </Card>
     </>

@@ -26,7 +26,7 @@ const db: DataTypes = {
 };
 
 export function get<K extends DataKey>(key: K): DataTypes[K] {
-  return db[key];
+  return JSON.parse(JSON.stringify(db[key]));
 }
 
 export function set<K extends DataKey>(key: K, value: DataTypes[K]) {

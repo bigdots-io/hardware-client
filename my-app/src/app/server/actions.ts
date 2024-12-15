@@ -29,14 +29,14 @@ export async function setActiveSlot(slot: Slot | null) {
   revalidatePath("/");
 }
 
-export async function changeOverrideTime(amount: number) {
+export async function changeEndTime(minuteChange: number) {
   const newEnd = new Date();
 
   const activeSlot = get(DataKey.ActiveSlot);
 
   if (activeSlot) {
     newEnd.setHours(activeSlot?.end.hour);
-    newEnd.setMinutes(activeSlot?.end.minute + amount);
+    newEnd.setMinutes(activeSlot?.end.minute + minuteChange);
 
     const hour = newEnd.getHours();
     const minute = newEnd.getMinutes();
