@@ -1,4 +1,3 @@
-import { SceneName } from "@bigdots-io/display-engine";
 import { Slot } from "../types.ts";
 import fs from "fs";
 

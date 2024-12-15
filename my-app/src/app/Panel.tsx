@@ -10,60 +10,23 @@ import {
   Flex,
   Group,
   Menu,
-  Paper,
   rem,
   Stack,
   Text,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { changeOverrideTime, setActiveSlot } from "./server/actions";
 import Display from "./display";
-import { EditSlotsModal } from "./EditSlotsModal";
 import { formatActiveSlotScene, formatSlotEndingTime } from "./utils";
 import { Panel as PanelType } from "./types";
 import { IconDotsVertical } from "@tabler/icons-react";
 
-// function toDate({ hour, minute }: { hour: number; minute: number }) {
-//   const date = new Date();
-//   date.setHours(hour);
-//   date.setMinutes(minute);
-
-//   const currentHour = new Date().getHours();
-
-//   // if (hour < currentHour) {
-//   //   date.setDate(date.getDate() + 1);
-//   // }
-
-//   return date;
-// }
-
-// function canDecreaseTime(panel: PanelType): boolean {
-//   const { activeSlot, scheduledSlot } = panel;
-
-//   const proposedEnd = {
-//     hour: activeSlot.end.hour,
-//     minute: activeSlot.end.minute - 5,
-//   };
-
-//   if (scheduledSlot) {
-//     return (
-//       toDate(proposedEnd).getTime() > toDate(scheduledSlot.start).getTime()
-//     );
-//   }
-
-//   return false;
-// }
-
 export default function Panel({
   panel,
-  scenes,
 }: {
   panel: PanelType;
   scenes: string[];
 }) {
-  const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
-
-  console.log(panel);
+  // const [editSlotsOpened, editSlotsHandlers] = useDisclosure(false);
 
   return (
     <>
