@@ -61,9 +61,7 @@ export default function Panel({
                 <Button
                   variant="filled"
                   fullWidth
-                  onClick={async (ev) => {
-                    ev.preventDefault();
-
+                  onClick={() => {
                     const hour = new Date().getHours();
                     const minute = new Date().getMinutes();
 
@@ -72,7 +70,6 @@ export default function Panel({
                       end: { hour: hour + 2, minute },
                       scene: "bunny",
                     });
-                    close();
                   }}
                 >
                   Nap Mode
@@ -80,9 +77,7 @@ export default function Panel({
                 <Button
                   variant="filled"
                   fullWidth
-                  onClick={async (ev) => {
-                    ev.preventDefault();
-
+                  onClick={() => {
                     const endDate = new Date();
                     endDate.setDate(endDate.getDate() + 1);
                     endDate.setHours(7, 0, 0, 0);
@@ -98,7 +93,6 @@ export default function Panel({
                       },
                       scene: "moon",
                     });
-                    close();
                   }}
                 >
                   Sleep Mode
@@ -106,25 +100,8 @@ export default function Panel({
                 <Button
                   variant="light"
                   fullWidth
-                  onClick={async (ev) => {
-                    ev.preventDefault();
-
-                    const endDate = new Date();
-                    endDate.setDate(endDate.getDate() + 1);
-                    endDate.setHours(7, 0, 0, 0);
-
-                    const hour = new Date().getHours();
-                    const minute = new Date().getMinutes();
-
-                    setActiveSlot({
-                      start: { hour, minute },
-                      end: {
-                        hour: endDate.getHours(),
-                        minute: endDate.getMinutes(),
-                      },
-                      scene: "moon",
-                    });
-                    close();
+                  onClick={() => {
+                    alert("todo");
                   }}
                 >
                   Custom...
